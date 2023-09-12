@@ -46,25 +46,17 @@ const Api = ({ task }: IProps) => {
     <>
       <Grid
         container
-        direction="row"
+        direction="column"
         justifyContent="center"
         alignItems="center"
-        sx={{
-          width: {
-            xs: "100%", //0
-            sm: "100%", //600
-            md: "100%", //900
-            lg: "100%", //1200
-            xl: "100%", //1536
-          },
-        }}
+        
       >
         <Typography
           sx={{
             fontSize: 26,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            // display: "flex",
+            // flexDirection: "column",
+            // alignItems: "center",
           }}
           color="text.secondary"
           gutterBottom
@@ -76,7 +68,7 @@ const Api = ({ task }: IProps) => {
             src={`https://quickchart.io/chart?w=150&h=40&c=${JSON.stringify(
               dataUrl
             )}`}
-            style={{ border: "0", width: 300, height: 80 }}
+            style={{ border: "0", width: 300, height: 100 }}
             title="Iframe Example"
           ></iframe>
         )}

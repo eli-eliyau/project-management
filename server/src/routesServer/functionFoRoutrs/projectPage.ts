@@ -11,7 +11,7 @@ export const projectPage = async (
   try {
     const project = await ProjectsPageSchema.findOne({
       _id: req.body.projectId,
-    });
+    },{__v:0});
     return res.send(project);
   } catch (err) {
     console.log(err);
