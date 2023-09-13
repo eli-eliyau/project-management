@@ -6,20 +6,21 @@ import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
 import { cacheRtl, theme } from "../SignIn";
 import { useForm } from "react-hook-form";
+import { sendReqPut } from "../../axios";
 
 interface Props {
   onClose: Function;
-  data: { [index: string]: string };
+  projectItems: { [index: string]: string };
   nameInput: string | undefined;
 }
 interface Form {
-  detail: string;
+  item: string;
 }
 
-const ModalEdit = ({ onClose, data, nameInput }: Props) => {
+const ModalEdit = ({ onClose, projectItems, nameInput }: Props) => {
   const [projectItem, setProjectItem] = React.useState<{
     [index: string]: string;
-  }>(data);
+  }>(projectItems);
   const {
     register,
     handleSubmit,
@@ -28,12 +29,24 @@ const ModalEdit = ({ onClose, data, nameInput }: Props) => {
     clearErrors,
   } = useForm<Form>({
     defaultValues: {
-      detail: Object.values(projectItem)[0],
+      item: Object.values(projectItem)[0],
     },
   });
 
-  const onSubmit = (data: Form) => {
-    console.log(data.detail);
+  const onSubmit = (dataForm: Form) => {
+    const { projectId } = projectItems;
+
+    sendReqPut(
+      {
+        projectId,
+        nameRow: Object.keys(projectItem)[0],
+        value: dataForm.item,
+      },
+      "/editProject"
+    )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+
     onClose(false);
   };
 
@@ -56,12 +69,13 @@ const ModalEdit = ({ onClose, data, nameInput }: Props) => {
               borderRadius: "20px 20px 20px 20px",
             }}
           >
+           
             <TextField
               variant="standard"
-              value={Object.values(projectItem)}
+              value={Object.values(projectItem)[0]}
               label={nameInput}
               type="text"
-              {...register("detail", {
+              {...register("item", {
                 // maxLength: { value: 10, message: "שם המלא עד 10 תויים" },
               })}
               onChange={(e) =>

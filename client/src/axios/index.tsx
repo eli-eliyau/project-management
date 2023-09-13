@@ -18,6 +18,24 @@ const sendReqPost = async (data: object | [object], toUrl: string) => {
   }
 };
 
+const sendReqPut = async (data: object | [object], toUrl: string) => {
+  try {
+    const res = await axios({
+      method: "put",
+      url: `${URL_SERVER}${toUrl}`,
+      data,
+    });
+    if (res.data) {
+      return res.data.acknowledged;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 const sendReqGet = async (data: object, toUrl: string) => {
   try {
     const res = await axios({
@@ -34,4 +52,4 @@ const sendReqGet = async (data: object, toUrl: string) => {
     console.log(error);
   }
 };
-export { sendReqPost, sendReqGet };
+export { sendReqPost,sendReqPut ,sendReqGet };

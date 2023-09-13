@@ -1,6 +1,13 @@
 import React from "react";
 import { sendReqPost } from "../../axios";
-import { Button, Divider, Grid, Modal, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Grid,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ModalEdit from "./ModalEdit";
 
@@ -23,7 +30,9 @@ interface Props {
 const ProjectDetails = ({ projectId }: Props) => {
   const [projectData, setProjectData] = React.useState<Data>();
   const [open, setOpen] = React.useState<boolean>(false);
-  const [index, setIndex] = React.useState<{ [index: number]: string }>({});
+  const [index, setIndex] = React.useState<number>(0);
+  const [items, setItems] = React.useState<{ [key: string]: string }>({});
+  let id: string;
 
   React.useEffect(() => {
     //בקשה לקבל את הנתונים של המפרויקט
@@ -33,7 +42,7 @@ const ProjectDetails = ({ projectId }: Props) => {
         //   setRefreshingforProject(false);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [open,projectId]);
 
   const nameDetails = [
     "id",
@@ -58,64 +67,68 @@ const ProjectDetails = ({ projectId }: Props) => {
       }}
     >
       {projectData &&
-        Object.entries(projectData).map(([key, value], index) => (
-          <>
-            {value !== projectData._id && (
-              <Grid
-                container
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                width={"100%"}
-                key={index}
-              >
+        Object.entries(projectData).map(([key, value], index) => {
+          id = projectData._id;
+
+          return (
+            <>
+              {value !== projectData._id && (
                 <Grid
-                  item
-                  direction="column"
-                  justifyContent="flex-start"
-                  alignItems="flex-start"
-                  width={"90%"}
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  width={"100%"}
                   key={index}
                 >
-                  <Divider
-                    orientation="horizontal"
-                    flexItem
-                    sx={{ bgcolor: "#83C1ED" }}
-                  />
-                  <Typography variant="h6">{nameDetails[index]}</Typography>
-                  <Typography
-                    sx={{
-                      wordWrap: "break-word",
-                      whiteSpace: "pre-line",
-                    }}
+                  <Grid
+                    item
+                    direction="column"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                    width={"90%"}
                   >
-                    {value}
-                  </Typography>
-                </Grid>
+                    <Divider
+                      orientation="horizontal"
+                      flexItem
+                      sx={{ bgcolor: "#83C1ED" }}
+                    />
+                    <Typography variant="h6">{nameDetails[index]}</Typography>
+                    <Typography
+                      sx={{
+                        wordWrap: "break-word",
+                        whiteSpace: "pre-line",
+                      }}
+                    >
+                      {value}
+                    </Typography>
+                  </Grid>
 
-                <Grid item>
-                  <Button
-                    onClick={() => {
-                      setIndex({ [index]: value });
-                      setOpen(true);
-                    }}
-                  >
-                    <EditIcon htmlColor="#0661A2" />
-                  </Button>
-                </Grid>
+                  <Grid item>
+                    <Button
+                      onClick={() => {
+                        setItems({ [key]: value, projectId: id });
+                        setIndex(index);
+                        setOpen(true);
+                      }}
+                    >
+                      <EditIcon htmlColor="#0661A2" />
+                    </Button>
+                  </Grid>
 
-                {/* <Api task={task} /> */}
-              </Grid>
-            )}
-          </>
-        ))}
+                  {/* <Api task={task} /> */}
+                </Grid>
+              )}
+            </>
+          );
+        })}
       {open && (
         <Modal open={open} sx={{ background: "#5be6f841" }}>
           <>
             <ModalEdit
               onClose={setOpen}
-              data={index}
-              nameInput={nameDetails[Number(Object.keys(index))]}
+              projectItems={items}
+              nameInput={nameDetails[index]}
             />
           </>
         </Modal>
