@@ -75,39 +75,6 @@ export default function SignIn({ onUserToken }: IProps) {
         { shouldFocus: true }
       )})
 
-
-
-    // axios
-    //   .post(`${URL_SERVER}/signInPage`, {
-    //     name: data.name,
-    //     pass: data.password,
-    //   })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     res.data.token
-    //       ? axios
-    //           .get("http://localhost:3001/authenticationToken", {
-    //             headers: {
-    //               "x-api-key": res.data.token,
-    //             },
-    //           })
-    //           .then((res) => {
-    //             onUserToken(res.data.token);
-    //             console.log(res.data);
-    //           })
-    //           .catch((err) => console.log(err))
-    //       : setError(
-    //           `errorServer`,
-    //           {
-    //             type: "custom",
-    //             message: `${res.data}`,
-    //           },
-    //           { shouldFocus: true }
-    //         );
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   return (
