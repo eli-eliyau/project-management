@@ -15,6 +15,7 @@ import SideBar from "./SideBar";
 import HeaderBar from "../componnts/HeaderBar";
 import LogOut from "../componnts/LogOut";
 import ProjectPage2 from "../componnts/projectPage/ProjectPage2";
+import CreateProject from "../componnts/createNewProjectPage/CreateProject";
 export interface DataProject {
   _id: string;
   name: string;
@@ -119,7 +120,7 @@ const RoutesFront = () => {
                 />
                 <Route
                   path="/create-new-project"
-                  element={<CreateNewProject />}
+                  element={<CreateProject />}
                 />
                 <Route path="/log-out" element={<LogOut />} />
               </Routes>
