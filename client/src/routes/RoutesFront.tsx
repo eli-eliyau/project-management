@@ -16,6 +16,8 @@ import HeaderBar from "../componnts/HeaderBar";
 import LogOut from "../componnts/LogOut";
 import ProjectPage2 from "../componnts/projectPage/ProjectPage2";
 import CreateProject from "../componnts/createNewProjectPage/CreateProject";
+import Task from "../componnts/projectPage/TaskFoProject";
+import Tasks from "../componnts/projectPage/Tasks";
 export interface DataProject {
   _id: string;
   name: string;
@@ -32,7 +34,6 @@ const RoutesFront = () => {
     role: string;
   }>();
 
-  
   useEffect(() => {
     //בקשה אימות לתוקן שקביל היוזר בכניסה למערכת לתוקן שנימצא בדאתא
     sendReqPost({ token: userToken }, "/authenticateTheLoginOfAPageUser")
@@ -93,8 +94,12 @@ const RoutesFront = () => {
             )}
 
             <Grid
+              container
               item
-              height={"100vh"}
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              // height={"100vh"}
               sx={{
                 width: { xs: "100%", sm: "80%", md: "80%", xl: "80%" },
                 mr: { sm: "20%" },
@@ -111,17 +116,15 @@ const RoutesFront = () => {
                     //   onId={setProjectId}
                     // />
                     // <Projects />
-                    <Project2 onProjectId={setProjectId}/>
+                    <Project2 onProjectId={setProjectId} />
                   }
                 />
                 <Route
                   path="/project"
                   element={<ProjectPage2 id={projectId} />}
                 />
-                <Route
-                  path="/create-new-project"
-                  element={<CreateProject />}
-                />
+                <Route path="/create-new-project" element={<CreateProject />} />
+                <Route path="/task" element={<Tasks />} />
                 <Route path="/log-out" element={<LogOut />} />
               </Routes>
             </Grid>

@@ -10,6 +10,7 @@ import ListButtons from "./ListButtonsBar";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChatIcon from "@mui/icons-material/Chat";
+import { buttons } from "../routes/SideBar";
 
 export const userName = () => (
   <Typography
@@ -47,7 +48,7 @@ const HeaderBar = (props: { isSmallScreen: boolean }) => {
             onClose={() => setOpenDrawer(false)}
             anchor="right"
           >
-            <ListButtons listButtons={["פרויקטים", "יצירת פרויקט", "התנתק"]} />
+            <ListButtons listButtons={buttons} />
           </Drawer>
 
           <IconButton

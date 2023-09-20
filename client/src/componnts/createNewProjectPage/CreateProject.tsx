@@ -7,7 +7,7 @@ import InpotForm from "./Inpot";
 const CreateProject = () => {
  
 
-  const nameLabel = [
+  const nameLabels = [
     "שם",
     "סטטוס",
     "מצב",
@@ -18,30 +18,31 @@ const CreateProject = () => {
     "לקוח הפרויקט",
   ];
 
-  const nameLabel2 = [
-    "name",
-    "status",
-    "situation",
-    "users",
-    "topUser",
-    "projectDescription",
-    "projectTeam",
-    "projectClient",
-  ];
+  const nameLabel = {
+    "name":"שם",
+    "status": "סטטוס",
+    "situation": "מצב",
+    "users":"משתמשים",
+    "topUser": "משתמש מוביל",
+    "projectDescription":"תיאור הפרויקט",
+    "projectTeam": "צוות הפרויקט",
+    "projectClient":"לקוח הפרויקט",
+  }
 
   return (
-    <Box sx={{ p: 7 }}>
+    <Box 
+    width={'80%'}
+    sx={{pt:8}}
+    >
       <Grid
         container
-        component={"form"}
         sx={{
           boxShadow: 10,
           borderBottom: "3px solid #1C6EA4",
           borderRadius: "20px 20px 20px 20px",
-          p: 2,
         }}
       >
-      <InpotForm item={nameLabel2} item2={nameLabel} />
+      <InpotForm item={nameLabel}  />
       </Grid>
     </Box>
   );
