@@ -5,6 +5,8 @@ import dayjs from "dayjs";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ProgressCircle from "./ProgressCircle";
 import { useNavigate } from "react-router-dom";
+import {useRecoilState} from 'recoil'
+import { projectId } from "../../recilAtom/Atoms";
 
 interface Projects {
   _id: string;
@@ -21,6 +23,7 @@ interface Props {
 const Project2 = ({ onProjectId }: Props) => {
   const [projects, setProjects] = useState<Projects[]>();
   const [progress, setProgress] = useState(0);
+  const [id,setId] =useRecoilState(projectId)
   const navigate = useNavigate();
 
   const circularProgress = () => {
@@ -97,6 +100,7 @@ const Project2 = ({ onProjectId }: Props) => {
             <Button
               onClick={() => {
                 onProjectId(element._id);
+                setId(element._id)
                 navigate("/project");
               }}
             >
