@@ -7,20 +7,22 @@ import { CacheProvider } from "@emotion/react";
 import { cacheRtl, theme } from "../SignIn";
 import { useForm } from "react-hook-form";
 import { sendReqPut } from "../../axios";
+import { Task } from "./Tasks";
 
 interface Props {
   onClose: Function;
-  projectItems: { [index: string]: string };
-  nameInput: string | undefined;
+  items: { [index: string]: string } ;
+  nameInput: string  |undefined
 }
 interface Form {
   item: string;
 }
 
-const ModalEdit = ({ onClose, projectItems, nameInput }: Props) => {
+const ModalEdit = ({ onClose, items, nameInput }: Props) => {
   const [projectItem, setProjectItem] = React.useState<{
-    [index: string]: string;
-  }>(projectItems);
+    [index: string]: string 
+  }>(items);
+
   const {
     register,
     handleSubmit,
@@ -32,20 +34,22 @@ const ModalEdit = ({ onClose, projectItems, nameInput }: Props) => {
       item: Object.values(projectItem)[0],
     },
   });
+console.log('nameInput' ,'---',nameInput);
+console.log('items' ,'---',items);
 
   const onSubmit = (dataForm: Form) => {
-    const { projectId } = projectItems;
+    const { projectId } = items;
 
-    sendReqPut(
-      {
-        projectId,
-        nameRow: Object.keys(projectItem)[0],
-        value: dataForm.item,
-      },
-      "/editProject"
-    )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    // sendReqPut(
+    //   {
+    //     projectId,
+    //     nameRow: Object.keys(projectItem)[0],
+    //     value: dataForm.item,
+    //   },
+    //   "/editProject"
+    // )
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
 
     onClose(false);
   };

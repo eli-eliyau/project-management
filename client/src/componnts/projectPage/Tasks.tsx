@@ -5,7 +5,7 @@ import {
   Grid,
   List,
   ListItem,
-  ListItemText,
+  Modal,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -16,7 +16,10 @@ import { projectId } from "../../recilAtom/Atoms";
 import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
 import { cacheRtl, theme } from "../SignIn";
-interface Task {
+import ModalEdit from "./ModalEdit";
+import EditIcon from "@mui/icons-material/Edit";
+
+export interface Task {
   _id: string;
   projectId: string;
   taskDescription: string;
@@ -27,9 +30,17 @@ interface Task {
 }
 
 const Tasks = () => {
-  const [tasks, setTasks] = React.useState<Task[]>();
+  const [taskList, setTasks] = React.useState<Task[]>();
+  const [isActive, setIsActive] = React.useState("פעיל");
+  const [openModal, setOpen] = React.useState(false);
+  const [taskToUpdate, setTaskToUpdate] = React.useState<{
+    [index: string]: string;
+  }>();
+  const [index, setIndex] = React.useState(0);
+
   const id = useRecoilValue(projectId);
-  let count = 0;
+  let countTask = 0;
+  let countTaskItem = 0;
 
   React.useEffect(() => {
     //בקשה לקבל את הנתונים של המפרויקט
@@ -37,7 +48,7 @@ const Tasks = () => {
     sendReqPost({ projectId: id }, "/taskFoProject")
       .then((res) => {
         setTasks(res);
-        tasks?.sort((a, b) => {
+        taskList?.sort((a, b) => {
           const dateA = new Date(dayjs(a.endDate).toDate());
           const dateB = new Date(dayjs(b.endDate).toDate());
 
@@ -54,9 +65,41 @@ const Tasks = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const listTask = (primary: string, item: string) => (
-    <ListItem>
-      <Typography>{`${primary} - ${item}`}</Typography>
+  const taskFields = {
+    tasks: "משימה",
+    taskDescription: "תיאור המשימה",
+    startDate: "תאריך התחלה",
+    endDate: "תאריך סיום",
+    taskStatus: "סטטוס משימה",
+  };
+
+  const renderTaskField = (
+    index: number,
+    primary: string,
+    value: string,
+    taskId: string
+  ) => (
+    <ListItem
+      sx={{
+        direction: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <Typography>{`${primary} - ${value}`}</Typography>
+      <Button
+        onClick={() => {
+          setTaskToUpdate({
+            [Object.keys(taskFields)[index]]: value,
+            id: taskId,
+          });
+          setIndex(index);
+
+          setOpen(true);
+        }}
+      >
+        <EditIcon htmlColor="#0661A2" />
+      </Button>
     </ListItem>
   );
 
@@ -88,34 +131,68 @@ const Tasks = () => {
               justifyContent="center"
               alignItems="center"
             >
-              <Button>{"פעיל"}</Button>
-              <Button>{"לא פעיל"}</Button>
+              {/* <Button variant={"filled"}/> */}
+              <Button  onClick={() => setIsActive("פעיל")}>{"פעיל"}</Button>
+              <Button onClick={() => setIsActive("לא פעיל")}>
+                {"לא פעיל"}
+              </Button>
             </Grid>
             <Grid item>
               <List>
-                {tasks?.map((key, index) => (
-                  <>
-                    {key.taskStatus === "פעיל" && (
-                      <div key={index}>
-                        <ListItem>
-                          <Typography variant="h5">{`משימה ${++count}`}</Typography>
-                        </ListItem>
-                        {listTask("תיאור המשימה", key.taskDescription)}
-                        {listTask(
-                          "תאריך התחלה",
-                          dayjs(key.startDate).format("DD/MM/YYYY")
-                        )}
-                        {listTask(
-                          "תאריך סיום",
-                          dayjs(key.endDate).format("DD/MM/YYYY")
-                        )}
-                        {listTask("סטטוס משימה", key.taskStatus)}
-                        <Divider />
-                      </div>
-                    )}
-                  </>
-                ))}
+                {taskList?.map((key, index) => {
+                  countTaskItem = 0;
+                  return (
+                    <>
+                      {key.taskStatus === isActive && (
+                        <div key={index}>
+                          <ListItem>
+                            <Typography variant="h5">{`${
+                              Object.values(taskFields)[countTaskItem++]
+                            } ${++countTask}`}</Typography>
+                          </ListItem>
+                          {renderTaskField(
+                            countTaskItem,
+                            Object.values(taskFields)[countTaskItem++],
+                            key.taskDescription,
+                            key._id
+                          )}
+                          {renderTaskField(
+                            countTaskItem,
+                            Object.values(taskFields)[countTaskItem++],
+                            dayjs(key.startDate).format("DD/MM/YYYY"),
+                            key._id
+                          )}
+                          {renderTaskField(
+                            countTaskItem,
+                            Object.values(taskFields)[countTaskItem++],
+                            dayjs(key.endDate).format("DD/MM/YYYY"),
+                            key._id
+                          )}
+                          {renderTaskField(
+                            countTaskItem,
+                            Object.values(taskFields)[countTaskItem++],
+                            key.taskStatus,
+                            key._id
+                          )}
+
+                          <Divider />
+                        </div>
+                      )}
+                    </>
+                  );
+                })}
               </List>
+              {openModal && taskToUpdate && (
+                <Modal open={openModal} sx={{ background: "#5be6f841" }}>
+                  <>
+                    <ModalEdit
+                      onClose={setOpen}
+                      items={taskToUpdate}
+                      nameInput={Object.values(taskFields)[index]}
+                    />
+                  </>
+                </Modal>
+              )}
             </Grid>
           </Grid>
         </Grid>

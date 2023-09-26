@@ -127,7 +127,7 @@ const ProjectDetails = ({ projectId }: Props) => {
           <>
             <ModalEdit
               onClose={setOpen}
-              projectItems={items}
+              items={items}
               nameInput={nameDetails[index]}
             />
           </>
