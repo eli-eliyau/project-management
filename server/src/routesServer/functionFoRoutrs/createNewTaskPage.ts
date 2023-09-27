@@ -11,3 +11,12 @@ try {
     console.log(error);
 }
 }
+
+export const deleteTask =async(req:Request ,res:Response)=>{
+    try {
+        const newTask = await  TaskSchema.findByIdAndDelete(req.body.id)
+        return res.send(newTask)
+    } catch (error) {
+        console.log(error);
+    }
+    }

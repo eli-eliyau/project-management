@@ -107,7 +107,7 @@ const ProjectDetails = ({ projectId }: Props) => {
                   <Grid item>
                     <Button
                       onClick={() => {
-                        setItems({ [key]: value, projectId: id });
+                        setItems({ [key]: value,  id });
                         setIndex(index);
                         setOpen(true);
                       }}
@@ -129,6 +129,7 @@ const ProjectDetails = ({ projectId }: Props) => {
               onClose={setOpen}
               items={items}
               nameInput={nameDetails[index]}
+              typeModal="editProject"
             />
           </>
         </Modal>

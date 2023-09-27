@@ -11,16 +11,17 @@ import { Task } from "./Tasks";
 
 interface Props {
   onClose: Function;
-  items: { [index: string]: string } ;
-  nameInput: string  |undefined
+  items: { [index: string]: string };
+  nameInput: string | undefined;
+  typeModal: string;
 }
 interface Form {
   item: string;
 }
 
-const ModalEdit = ({ onClose, items, nameInput }: Props) => {
-  const [projectItem, setProjectItem] = React.useState<{
-    [index: string]: string 
+const ModalEdit = ({ onClose, items, nameInput, typeModal }: Props) => {
+  const [data, setData] = React.useState<{
+    [index: string]: string;
   }>(items);
 
   const {
@@ -31,25 +32,31 @@ const ModalEdit = ({ onClose, items, nameInput }: Props) => {
     clearErrors,
   } = useForm<Form>({
     defaultValues: {
-      item: Object.values(projectItem)[0],
+      item: Object.values(data)[0],
     },
   });
-console.log('nameInput' ,'---',nameInput);
-console.log('items' ,'---',items);
 
   const onSubmit = (dataForm: Form) => {
-    const { projectId } = items;
+    const { id } = items;
+    let url: string;
 
-    // sendReqPut(
-    //   {
-    //     projectId,
-    //     nameRow: Object.keys(projectItem)[0],
-    //     value: dataForm.item,
-    //   },
-    //   "/editProject"
-    // )
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
+    url =
+      typeModal === "editProject"
+        ? "/editProject"
+        : typeModal === "editTask"
+        ? "/editTask"
+        : "";
+
+    sendReqPut(
+      {
+        id,
+        nameRow: Object.keys(data)[0],
+        value: dataForm.item,
+      },
+      `${url}`
+    )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 
     onClose(false);
   };
@@ -73,18 +80,17 @@ console.log('items' ,'---',items);
               borderRadius: "20px 20px 20px 20px",
             }}
           >
-           
             <TextField
               variant="standard"
-              value={Object.values(projectItem)[0]}
+              value={Object.values(data)[0]}
               label={nameInput}
               type="text"
               {...register("item", {
                 // maxLength: { value: 10, message: "שם המלא עד 10 תויים" },
               })}
               onChange={(e) =>
-                setProjectItem({
-                  [Object.keys(projectItem)[0]]: e.target.value,
+                setData({
+                  [Object.keys(data)[0]]: e.target.value,
                 })
               }
             />

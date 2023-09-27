@@ -26,7 +26,7 @@ export const buttons = [
 
 const addButton = [
   {
-    name: "משימות פעילות",
+    name: "משימות",
     path: "/task",
     icon: <ListAltIcon htmlColor={"#ffff"} />,
   },

@@ -11,13 +11,14 @@ import {
 import React from "react";
 import { sendReqPost } from "../../axios";
 import dayjs, { Dayjs } from "dayjs";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue } from 'recoil';
 import { projectId } from "../../recilAtom/Atoms";
 import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
 import { cacheRtl, theme } from "../SignIn";
 import ModalEdit from "./ModalEdit";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export interface Task {
   _id: string;
@@ -63,7 +64,7 @@ const Tasks = () => {
         });
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [openModal,taskList,id]);
 
   const taskFields = {
     tasks: "משימה",
@@ -94,7 +95,6 @@ const Tasks = () => {
             id: taskId,
           });
           setIndex(index);
-
           setOpen(true);
         }}
       >
@@ -145,10 +145,17 @@ const Tasks = () => {
                     <>
                       {key.taskStatus === isActive && (
                         <div key={index}>
-                          <ListItem>
+                          <ListItem  sx={{
+        direction: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}>
                             <Typography variant="h5">{`${
                               Object.values(taskFields)[countTaskItem++]
                             } ${++countTask}`}</Typography>
+                            <Button>
+<DeleteIcon htmlColor="#0661A2"/>
+                            </Button>
                           </ListItem>
                           {renderTaskField(
                             countTaskItem,
@@ -189,6 +196,7 @@ const Tasks = () => {
                       onClose={setOpen}
                       items={taskToUpdate}
                       nameInput={Object.values(taskFields)[index]}
+                      typeModal="editTask"
                     />
                   </>
                 </Modal>

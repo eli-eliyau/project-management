@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 export const editProjectPage = async(req:Request ,res:Response)=>{
 try {
     
-    const editProject =await ProjectsPageSchema.updateOne(  { _id: new mongoose.Types.ObjectId(req.body.projectId) }, 
+    const editProject =await ProjectsPageSchema.updateOne(  { _id: new mongoose.Types.ObjectId(req.body.id) }, 
     { [req.body.nameRow]: req.body.value })
 
     return res.send(editProject)
