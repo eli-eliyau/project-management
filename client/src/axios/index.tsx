@@ -35,7 +35,6 @@ const sendReqPut = async (data: object | [object], toUrl: string) => {
   }
 };
 
-
 const sendReqGet = async (data: object, toUrl: string) => {
   try {
     const res = await axios({
@@ -52,4 +51,21 @@ const sendReqGet = async (data: object, toUrl: string) => {
     console.log(error);
   }
 };
-export { sendReqPost,sendReqPut ,sendReqGet };
+
+const sendReqDelete = async (data: object, toUrl: string) => {
+  try {
+    const res = await axios({
+      method: "delete",
+      url: `${URL_SERVER}${toUrl}`,
+      data,
+    });
+    if (res.data) {
+      return res.data;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+export { sendReqPost, sendReqPut, sendReqGet, sendReqDelete };

@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Divider,
   Grid,
@@ -9,23 +8,23 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { sendReqPost } from "../../axios";
+import { sendReqDelete, sendReqPost } from "../../axios";
 import dayjs, { Dayjs } from "dayjs";
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue } from "recoil";
 import { projectId } from "../../recilAtom/Atoms";
 import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
 import { cacheRtl, theme } from "../SignIn";
 import ModalEdit from "./ModalEdit";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export interface Task {
   _id: string;
   projectId: string;
   taskDescription: string;
   startDate: Dayjs;
-  endDate: Dayjs;
+  endDate: string;
   taskTag: string;
   taskStatus: string;
 }
@@ -49,22 +48,9 @@ const Tasks = () => {
     sendReqPost({ projectId: id }, "/taskFoProject")
       .then((res) => {
         setTasks(res);
-        taskList?.sort((a, b) => {
-          const dateA = new Date(dayjs(a.endDate).toDate());
-          const dateB = new Date(dayjs(b.endDate).toDate());
-
-          if (dateA < dateB) {
-            return -1;
-          }
-          if (dateA > dateB) {
-            return 1;
-          }
-
-          return 0;
-        });
       })
       .catch((err) => console.log(err));
-  }, [openModal,taskList,id]);
+  }, [taskList, id]);
 
   const taskFields = {
     tasks: "משימה",
@@ -72,6 +58,12 @@ const Tasks = () => {
     startDate: "תאריך התחלה",
     endDate: "תאריך סיום",
     taskStatus: "סטטוס משימה",
+  };
+
+  const deleteTask = (id: string) => {
+    sendReqDelete({ id }, "/deleteTask")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   const renderTaskField = (
@@ -130,10 +122,18 @@ const Tasks = () => {
               direction="row"
               justifyContent="center"
               alignItems="center"
+              sx={{ background: "#83C1ED", borderRadius: "20px 20px 0px 0px" }}
             >
-              {/* <Button variant={"filled"}/> */}
-              <Button  onClick={() => setIsActive("פעיל")}>{"פעיל"}</Button>
-              <Button onClick={() => setIsActive("לא פעיל")}>
+              <Button
+                sx={{ color: "#ffffff" }}
+                onClick={() => setIsActive("פעיל")}
+              >
+                {"פעיל"}
+              </Button>
+              <Button
+                sx={{ color: "#ffffff" }}
+                onClick={() => setIsActive("לא פעיל")}
+              >
                 {"לא פעיל"}
               </Button>
             </Grid>
@@ -145,16 +145,18 @@ const Tasks = () => {
                     <>
                       {key.taskStatus === isActive && (
                         <div key={index}>
-                          <ListItem  sx={{
-        direction: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}>
+                          <ListItem
+                            sx={{
+                              direction: "row",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
                             <Typography variant="h5">{`${
                               Object.values(taskFields)[countTaskItem++]
                             } ${++countTask}`}</Typography>
-                            <Button>
-<DeleteIcon htmlColor="#0661A2"/>
+                            <Button onClick={() => deleteTask(key._id)}>
+                              <DeleteIcon htmlColor="#0661A2" />
                             </Button>
                           </ListItem>
                           {renderTaskField(
@@ -166,13 +168,13 @@ const Tasks = () => {
                           {renderTaskField(
                             countTaskItem,
                             Object.values(taskFields)[countTaskItem++],
-                            dayjs(key.startDate).format("DD/MM/YYYY"),
+                            key.startDate.toString(),
                             key._id
                           )}
                           {renderTaskField(
                             countTaskItem,
                             Object.values(taskFields)[countTaskItem++],
-                            dayjs(key.endDate).format("DD/MM/YYYY"),
+                            key.endDate,
                             key._id
                           )}
                           {renderTaskField(

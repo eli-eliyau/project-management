@@ -18,6 +18,7 @@ import ProjectPage2 from "../componnts/projectPage/ProjectPage2";
 import CreateProject from "../componnts/createNewProjectPage/CreateProject";
 import Task from "../componnts/projectPage/TaskFoProject";
 import Tasks from "../componnts/projectPage/Tasks";
+import AddTask from "../componnts/projectPage/AddTask";
 export interface DataProject {
   _id: string;
   name: string;
@@ -124,6 +125,7 @@ const RoutesFront = () => {
                   element={<ProjectPage2 id={projectId} />}
                 />
                 <Route path="/create-new-project" element={<CreateProject />} />
+                <Route path="/create-new-task" element={<AddTask />} />
                 <Route path="/task" element={<Tasks />} />
                 <Route path="/log-out" element={<LogOut />} />
               </Routes>
