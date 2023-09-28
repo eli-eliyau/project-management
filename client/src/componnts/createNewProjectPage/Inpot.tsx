@@ -4,6 +4,7 @@ import {
   TextField,
   ThemeProvider,
   Grid,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { cacheRtl, theme } from "../SignIn";
@@ -80,6 +81,7 @@ const InpotForm = ({ item }: Props) => {
          justifyContent="center"
          alignItems="center"
         component={"form"} onSubmit={handleSubmit(submit)}>
+       
           {Object.entries(item).map(([key,value], index) => (
             <>
           

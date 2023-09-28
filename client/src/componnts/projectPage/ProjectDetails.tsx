@@ -42,7 +42,7 @@ const ProjectDetails = ({ projectId }: Props) => {
         //   setRefreshingforProject(false);
       })
       .catch((err) => console.log(err));
-  }, [open,projectId]);
+  }, [open, projectId]);
 
   const nameDetails = [
     "id",
@@ -66,6 +66,20 @@ const ProjectDetails = ({ projectId }: Props) => {
         p: 2,
       }}
     >
+      <Typography
+        variant="h6"
+        sx={{
+          background: "#83C1ED",
+          borderRadius: "20px 20px 20px 20px",
+          color: "#ffff",
+        }}
+        align="center"
+        width={"100%"}
+        height={"5%"}
+      >
+        נתוני הפרויקט
+      </Typography>
+
       {projectData &&
         Object.entries(projectData).map(([key, value], index) => {
           id = projectData._id;
@@ -107,7 +121,7 @@ const ProjectDetails = ({ projectId }: Props) => {
                   <Grid item>
                     <Button
                       onClick={() => {
-                        setItems({ [key]: value,  id });
+                        setItems({ [key]: value, id });
                         setIndex(index);
                         setOpen(true);
                       }}

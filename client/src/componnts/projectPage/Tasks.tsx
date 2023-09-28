@@ -18,6 +18,8 @@ import { cacheRtl, theme } from "../SignIn";
 import ModalEdit from "./ModalEdit";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 export interface Task {
   _id: string;
@@ -122,7 +124,10 @@ const Tasks = () => {
               direction="row"
               justifyContent="center"
               alignItems="center"
-              sx={{ background: "#83C1ED", borderRadius: "20px 20px 0px 0px" }}
+              sx={{
+                background: "#83C1ED",
+                borderRadius: "20px 20px 20px 20px",
+              }}
             >
               <Button
                 sx={{ color: "#ffffff" }}
@@ -137,6 +142,7 @@ const Tasks = () => {
                 {"לא פעיל"}
               </Button>
             </Grid>
+
             <Grid item>
               <List>
                 {taskList?.map((key, index) => {

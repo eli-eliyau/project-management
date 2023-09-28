@@ -1,7 +1,7 @@
 import React from "react";
 import { sendReqPost } from "../../axios";
 import {
-  Grid,
+  Grid, Typography,
 } from "@mui/material";
 import Api from "../Api";
 import ProjectDetails from "./ProjectDetails";
@@ -25,6 +25,7 @@ const ProjectPage2 = ({ id }: Props) => {
           p: 8,
         }}
       >
+       
         <ProjectDetails projectId={id} />
       </Grid>
     </>
