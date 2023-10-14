@@ -7,12 +7,11 @@ import dayjs from "dayjs";
 export const projectPage = async (
   req: Request,
   res: Response,
-  next: NextFunction
 ) => {
   try {
     const project = await ProjectsPageSchema.findOne({
       _id: req.body.projectId,
-    },{__v:0});
+    },{__v:0,dateCreated:0});
     return res.send(project);
   } catch (err) {
     console.log(err);
@@ -22,7 +21,6 @@ export const projectPage = async (
 export const taskFoProject = async (
   req: Request,
   res: Response,
-  next: NextFunction
 ) => {
   try {
     const tasks = await TaskSchema.find({ projectId: req.body.projectId },{__v:0});
@@ -40,11 +38,12 @@ export const taskFoProject = async (
 
       return 0;
     });
-  //   tasks?.forEach((item)=>{
+    
+    tasks?.forEach((item)=>{
       
-  //     item.startDate=dayjs(item.startDate).format('DD/MM/YYYY')
-  //     item.endDate=dayjs(item.endDate).format('DD/MM/YYYY')
-  // })
+      item.startDate=dayjs(item.startDate).format('DD/MM/YYYY')
+      item.endDate=dayjs(item.endDate).format('DD/MM/YYYY')
+  })
 
 
     return res.send(tasks);

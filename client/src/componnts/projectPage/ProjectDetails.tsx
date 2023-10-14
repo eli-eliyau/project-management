@@ -38,6 +38,8 @@ const ProjectDetails = ({ projectId }: Props) => {
     //בקשה לקבל את הנתונים של המפרויקט
     sendReqPost({ projectId: projectId }, "/projectPage")
       .then((res) => {
+        console.log(res);
+        
         setProjectData(res);
         //   setRefreshingforProject(false);
       })
@@ -77,7 +79,7 @@ const ProjectDetails = ({ projectId }: Props) => {
         width={"100%"}
         height={"5%"}
       >
-        נתוני הפרויקט
+        תוכן הפרויקט
       </Typography>
 
       {projectData &&

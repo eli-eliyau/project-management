@@ -4,10 +4,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
-import { cacheRtl, theme } from "../SignIn";
+import { cacheRtl, theme } from "../logn/SignIn";
 import { useForm } from "react-hook-form";
 import { sendReqPut } from "../../axios";
-import { Task } from "./Tasks";
+import { Task } from "../task/Tasks";
 
 interface Props {
   onClose: Function;

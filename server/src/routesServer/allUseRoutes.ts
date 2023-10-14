@@ -8,7 +8,7 @@ import routersEditProjectPage from "./routersEditProjectPage";
 import routersCreateNewProjectPage from "./routersCreateNewProjectPage";
 import routersCreateNewAdjunctPage from "./routersCreateNewAdjunctPage";
 import routerSignUpPage from "./routerSignUpPage";
-import routerLoggedOfPage from "./routerLoggedOfPage"
+import routerLoggedOffPage from "./routerLoggedOfPage"
 
 const allRoutes = (app: Expression) => {
   // ראוט להרשמה של יוזר חדש
@@ -30,6 +30,8 @@ const allRoutes = (app: Expression) => {
   //ראוט יצירת ניספח חדש למשימה
   app.use(routersCreateNewAdjunctPage);
   //התנתקות
-  app.use(routerLoggedOfPage);
+  app.use(routerLoggedOffPage);
+
+  
 };
 export default allRoutes;

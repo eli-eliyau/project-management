@@ -1,24 +1,19 @@
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
-import SignIn from "../componnts/SignIn";
-import HeaderBa from "../componnts/HeaderBa";
-import ProjectPage from "../componnts/projectPage/ProjectPage";
-import CreateNewProject from "../componnts/createNewProjectPage/createNewProject";
+import SignIn from "../componnts/logn/SignIn";
 import axios from "axios";
-import SignUp from "../componnts/sign_up/SignUp";
-import P from "../componnts/projectsPage/P";
+import SignUp from "../componnts/logn/SignUp";
 import { sendReqPost } from "../axios";
-import Projects from "../componnts/projectsPage/Projects";
-import Project2 from "../componnts/projectsPage/Project2";
+
+import Project from "../componnts/projectsPage/Projects";
 import { Grid, useMediaQuery, AppBar } from "@mui/material";
-import SideBar from "./SideBar";
-import HeaderBar from "../componnts/HeaderBar";
-import LogOut from "../componnts/LogOut";
-import ProjectPage2 from "../componnts/projectPage/ProjectPage2";
+import SideBar from "../componnts/bars/SideBar";
+import HeaderBar from "../componnts/bars/HeaderBar";
+import LogOut from "../componnts/logn/LogOut";
+import ProjectPage from "../componnts/projectPage/ProjectPage";
 import CreateProject from "../componnts/createNewProjectPage/CreateProject";
-import Task from "../componnts/projectPage/TaskFoProject";
-import Tasks from "../componnts/projectPage/Tasks";
-import AddTask from "../componnts/projectPage/AddTask";
+import Tasks from "../componnts/task/Tasks";
+import NewTask from "../componnts/task/NewTask";
 export interface DataProject {
   _id: string;
   name: string;
@@ -39,16 +34,20 @@ const RoutesFront = () => {
     //בקשה אימות לתוקן שקביל היוזר בכניסה למערכת לתוקן שנימצא בדאתא
     sendReqPost({ token: userToken }, "/authenticateTheLoginOfAPageUser")
       .then((res) => {
+        console.log(res);
+
         if (res.token) {
           setUser(res);
           localStorage.setItem("user", `1`);
+          localStorage.setItem("role", res.role);
+          localStorage.setItem("id", res._id);
           localStorage.setItem("userName", `${res.name}`);
         }
       })
       .catch((err) => {
         console.error(err);
       });
-  }, [userToken, user]);
+  }, [userToken]);
   let userValid = localStorage.getItem("user");
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
@@ -68,7 +67,6 @@ const RoutesFront = () => {
         </Routes>
       ) : userValid === `1` ? (
         <>
-          {/* <HeaderBar onData={setProjectData} user={user} /> */}
           <Grid
             container
             direction="row"
@@ -110,22 +108,14 @@ const RoutesFront = () => {
                 <Route path="*" element={<Navigate to="/projects" replace />} />
                 <Route
                   path="/projects"
-                  element={
-                    // <P
-                    //   data={projects}
-                    //   userName={user?.name}
-                    //   onId={setProjectId}
-                    // />
-                    // <Projects />
-                    <Project2 onProjectId={setProjectId} />
-                  }
+                  element={<Project onProjectId={setProjectId} />}
                 />
                 <Route
                   path="/project"
-                  element={<ProjectPage2 id={projectId} />}
+                  element={<ProjectPage id={projectId} />}
                 />
                 <Route path="/create-new-project" element={<CreateProject />} />
-                <Route path="/create-new-task" element={<AddTask />} />
+                <Route path="/create-new-task" element={<NewTask />} />
                 <Route path="/task" element={<Tasks />} />
                 <Route path="/log-out" element={<LogOut />} />
               </Routes>

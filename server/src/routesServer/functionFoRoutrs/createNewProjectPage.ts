@@ -1,13 +1,16 @@
 import ProjectSchema from "../../schemas/ProjectSchema";
-import {Request,Response} from 'express'
+import { Request, Response } from 'express'
 
 
-export const createNewProjectPage=async(req:Request,res:Response)=>{
-try {
-    const newProject =new ProjectSchema(req.body.DataNewProject)
-    newProject.save()
-    return res.send(newProject)
-} catch (error) {
-    console.log(error);
-}
+export const createNewProjectPage = async (req: Request, res: Response) => {
+    try {
+        req.body.newProject.projectUsers= req.body.projectTeam;
+        console.log(req.body);
+        //צריך לקחת את השמות של איוזרים לפי אידי שלהם ולכניס אותם לצוות הפרויקט
+        const newProject = new ProjectSchema(req.body.newProject)
+        await newProject.save()
+        return res.send(newProject)
+    } catch (error) {
+        console.log(error);
+    }
 }

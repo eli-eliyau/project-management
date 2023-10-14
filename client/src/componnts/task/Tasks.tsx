@@ -11,11 +11,11 @@ import React from "react";
 import { sendReqDelete, sendReqPost } from "../../axios";
 import dayjs, { Dayjs } from "dayjs";
 import { useRecoilValue } from "recoil";
-import { projectId } from "../../recilAtom/Atoms";
+import { projectId } from "../../recoilAtom/Atoms";
 import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
-import { cacheRtl, theme } from "../SignIn";
-import ModalEdit from "./ModalEdit";
+import { cacheRtl, theme } from "../logn/SignIn";
+import ModalEdit from "../projectPage/ModalEdit";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -129,17 +129,32 @@ const Tasks = () => {
                 borderRadius: "20px 20px 20px 20px",
               }}
             >
+              <Typography
+                variant="h6"
+                sx={{
+                  background: "#83C1ED",
+                  borderRadius: "20px 20px 20px 20px",
+                  color: "#ffff",
+                }}
+                align="center"
+                width={"100%"}
+                height={"5%"}
+              >
+                משימות
+              </Typography>
+
               <Button
                 sx={{ color: "#ffffff" }}
                 onClick={() => setIsActive("פעיל")}
               >
-                {"פעיל"}
+                {"פעילות"}
               </Button>
+              {"/"}
               <Button
                 sx={{ color: "#ffffff" }}
                 onClick={() => setIsActive("לא פעיל")}
               >
-                {"לא פעיל"}
+                {"לא פעילות"}
               </Button>
             </Grid>
 

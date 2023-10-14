@@ -10,20 +10,30 @@ import { useForm } from "react-hook-form";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { CacheProvider } from "@emotion/react";
-import { cacheRtl, theme } from "../SignIn";
+import { cacheRtl, theme } from "../logn/SignIn";
 import { useState } from "react";
 import heLocale from "date-fns/locale/he";
+import { sendReqPost } from "../../axios";
+import { useRecoilValue } from "recoil";
+import { projectId } from "../../recoilAtom/Atoms";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
-  description: string;
+  projectId: string;
+  taskDescription: string;
   startDate: Date;
   endDate: Date;
 }
 
-const AddTask = () => {
+const NewTask = () => {
+  const navitate = useNavigate();
+
+  const id = useRecoilValue(projectId);
+
   const { register, setValue, handleSubmit } = useForm<FormData>({
     defaultValues: {
-      description: "",
+      projectId: id,
+      taskDescription: "",
       startDate: undefined,
       endDate: undefined,
     },
@@ -35,6 +45,11 @@ const AddTask = () => {
 
   const onSubmit = (data: FormData) => {
     console.log(data);
+    sendReqPost(data, "/createNewTask").then((res) => {
+      console.log(res);
+      alert("משימה נוספה בהצלחה");
+      navitate("/projects");
+    });
   };
 
   return (
@@ -86,7 +101,7 @@ const AddTask = () => {
                 disableUnderline: true,
               }}
               sx={{ borderBlockStyle: "#1259e6", width: "80%", pb: 2 }}
-              {...register("description")}
+              {...register("taskDescription")}
             />
 
             <Grid
@@ -124,7 +139,7 @@ const AddTask = () => {
                   required
                   inputFormat="dd/MM/yyyy"
                   label="תאריך סיום"
-                  value={valueEndDate} 
+                  value={valueEndDate}
                   {...register("endDate")}
                   onChange={(date) => {
                     date && setValue("endDate", date);
@@ -153,4 +168,4 @@ const AddTask = () => {
   );
 };
 
-export default AddTask;
+export default NewTask;

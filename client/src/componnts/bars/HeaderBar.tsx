@@ -10,7 +10,7 @@ import ListButtons from "./ListButtonsBar";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChatIcon from "@mui/icons-material/Chat";
-import { buttons } from "../routes/SideBar";
+import { buttons } from "./SideBar";
 
 export const userName = () => (
   <Typography

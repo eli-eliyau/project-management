@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import ListButtonsBar from "../componnts/ListButtonsBar";
+import ListButtonsBar from "./ListButtonsBar";
 import CreateIcon from "@mui/icons-material/Create";
 import FolderIcon from "@mui/icons-material/Folder";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -12,17 +12,17 @@ export const buttons = [
   {
     name: "פרויקטים",
     path: "/projects",
-    icon: <FolderIcon htmlColor={"#ffff"} />,
+    icon: <FolderIcon />,
   },
   {
     name: "יצירת פרויקט",
     path: "/create-new-project",
-    icon: <CreateIcon htmlColor={"#ffff"} />,
+    icon: <CreateIcon />,
   },
   {
     name: "התנתק",
     path: "/log-out",
-    icon: <LogoutIcon htmlColor={"#ffff"} />,
+    icon: <LogoutIcon />,
   },
 ];
 
@@ -30,25 +30,21 @@ const addButtonTask = [
   {
     name: "משימות",
     path: "/task",
-    icon: <ListAltIcon htmlColor={"#ffff"} />,
+    icon: <ListAltIcon />,
   },
-  
 ];
 
 const addButtonAddTask = [
   {
     name: "הוספת משימה",
     path: "/create-new-task",
-    icon: <PlaylistAddIcon htmlColor="#ffffff" />,
+    icon: <PlaylistAddIcon />,
   },
 ];
 
 const SideBar = () => {
-
   const location = useLocation();
   let newButtons: any;
-
-  console.log(location.pathname);
 
   if (location.pathname === "/project") {
     newButtons = buttons.concat(addButtonTask);
@@ -64,7 +60,13 @@ const SideBar = () => {
       direction="row"
       sx={{ background: "#83C1ED", height: "100vh", mt: 5 }}
     >
-      <Grid item direction="column" justifyContent="start" width={"100%"}>
+      <Grid
+        item
+        direction="column"
+        justifyContent="start"
+        width={"100%"}
+        sx={{ mt: 1 }}
+      >
         <ListButtonsBar
           listButtons={
             location.pathname === `/project`

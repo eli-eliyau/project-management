@@ -10,12 +10,12 @@ export interface IProject {
   projectDescription: string;
   projectTeam: string;
   projectClient:string
-  dadeCreated: {
-    type: Date,
+  dateCreated: {
+    type: string,
   },
 }
 
-const projectSchema: Schema = new Schema<IProject>({
+const projectSchema: Schema = new Schema({
   name: { type: String, required: true },
   status: { type: String ,default:"פועל"}, //סטטוס
   situation: { type: String }, //מצב תחזוקה
@@ -24,8 +24,9 @@ const projectSchema: Schema = new Schema<IProject>({
   projectDescription: { type: String, required: true }, //תיאור הפרוקייט
   projectTeam: { type: String, required: true }, //צוות הפרוייקט
   projectClient: { type: String, required: true },//לקוח הפרוייקט
-  dadeCreated: {
-    type: Date,
+  projectUsers:{ type:[String]},
+  dateCreated: {
+    type: Date,default:new Date
   },
 });
 const ProjectSchema = mongoose.model<IProject>(

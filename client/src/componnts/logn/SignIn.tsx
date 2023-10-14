@@ -12,11 +12,8 @@ import createCache from "@emotion/cache";
 import rtlPlugin from "stylis-plugin-rtl";
 import { CacheProvider } from "@emotion/react";
 import { prefixer } from "stylis";
-import { URL_SERVER } from "../App";
-import { sendReqGet, sendReqPost } from "../axios";
-
-
-
+import { URL_SERVER } from "../../App";
+import { sendReqGet, sendReqPost } from "../../axios";
 
 interface IProps {
   onUserToken: (token: string | undefined) => void;
@@ -54,27 +51,30 @@ export default function SignIn({ onUserToken }: IProps) {
   const onSubmit = (data: FormInputs) => {
     console.log(data);
 
-    sendReqPost({ name: data.name,
-      pass: data.password},'/signInPage')
-      .then((res) => {
+    sendReqPost({ name: data.name, pass: data.password }, "/signInPage").then(
+      (res) => {
         console.log(res);
-        res.token? sendReqGet( {
-          "x-api-key": res.token,
-        },'/authenticationToken')
-        .then((res) => {
-          onUserToken(res.token);
-          console.log(res);
-        })
-        .catch((err) => console.log(err))
-    : setError(
-        `errorServer`,
-        {
-          type: "custom",
-          message: `${res.data}`,
-        },
-        { shouldFocus: true }
-      )})
-
+        res.token
+          ? sendReqGet(
+              {
+                "x-api-key": res.token,
+              },
+              "/authenticationToken"
+            )
+              .then((res) => {
+                onUserToken(res.token);
+              })
+              .catch((err) => console.log(err))
+          : setError(
+              `errorServer`,
+              {
+                type: "custom",
+                message: `${res}`,
+              },
+              { shouldFocus: true }
+            );
+      }
+    );
   };
 
   return (

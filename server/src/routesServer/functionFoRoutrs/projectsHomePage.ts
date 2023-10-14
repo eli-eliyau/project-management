@@ -1,7 +1,16 @@
 import { Request, Response } from "express";
 import ProjectSchema from "../../schemas/ProjectSchema";
 import UsersSchema from "../../schemas/UsersSchema";
+import dayjs from "dayjs";
 
+interface J{
+  _id: Object,
+   name: string,
+   status: string,
+   situation: string,
+   dateCreated:string,
+ 
+}
 //מחזיר את כל הפרויקטים לדף הבית אבל רק שם סטטוס ומצב
 export const projectsHomePage = async (req: Request, res: Response) => {
   try {
@@ -17,6 +26,25 @@ export const projectsHomePage = async (req: Request, res: Response) => {
       }
     );
 
+    projects.sort((a, b) => {
+
+      const dateA = dayjs(a.dateCreated.type);
+      const dateB = dayjs(b.dateCreated.type);
+    
+      if (dateA.isBefore(dateB)) {
+        return -1;
+      }
+    
+      if (dateA.isAfter(dateB)) {
+        return 1;
+      }
+    
+      return 0;
+    
+    });
+   
+ 
+  
     return res.send(projects);
   } catch (err) {
     console.log(err);
@@ -30,7 +58,7 @@ export const authenticateTheLoginOfAPageUser = async (
   try {
     let userData = await UsersSchema.findOne(
       { token: req.body.token },
-      { _id: 0, pass: 0, dade_created: 0 }
+      { __v:0,pass: 0, dade_created: 0 }
     );
 
     return res.json(userData);
