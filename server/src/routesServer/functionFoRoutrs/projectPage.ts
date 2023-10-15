@@ -1,18 +1,20 @@
 import { Request, Response, NextFunction } from "express";
-import ProjectsPageSchema from "../../schemas/ProjectSchema";
+import ProjectsPageSchema, { IProject } from "../../schemas/ProjectSchema";
 import TaskAdjunctSchema from "../../schemas/TaskAdjunctsSchema";
 import TaskSchema from "../../schemas/TaskSchema";
 import dayjs from "dayjs";
+import UsersSchema from "../../schemas/UsersSchema";
 //מביא את כל הנתונים על הפרויקט
 export const projectPage = async (
   req: Request,
   res: Response,
 ) => {
   try {
-    const project = await ProjectsPageSchema.findOne({
+    const projectData: IProject | null = await ProjectsPageSchema.findOne({
       _id: req.body.projectId,
-    },{__v:0,dateCreated:0});
-    return res.send(project);
+    }, { __v: 0, dateCreated: 0 });
+
+    return res.send(projectData);
   } catch (err) {
     console.log(err);
   }
@@ -23,8 +25,8 @@ export const taskFoProject = async (
   res: Response,
 ) => {
   try {
-    const tasks = await TaskSchema.find({ projectId: req.body.projectId },{__v:0});
-   
+    const tasks = await TaskSchema.find({ projectId: req.body.projectId }, { __v: 0 });
+
     tasks.sort((a, b) => {
       const dateA = new Date(dayjs(a.endDate).toDate());
       const dateB = new Date(dayjs(b.endDate).toDate());
@@ -38,13 +40,12 @@ export const taskFoProject = async (
 
       return 0;
     });
-    
-    tasks?.forEach((item)=>{
-      
-      item.startDate=dayjs(item.startDate).format('DD/MM/YYYY')
-      item.endDate=dayjs(item.endDate).format('DD/MM/YYYY')
-  })
 
+    tasks?.forEach((item) => {
+
+      item.startDate = dayjs(item.startDate).format('DD/MM/YYYY')
+      item.endDate = dayjs(item.endDate).format('DD/MM/YYYY')
+    })
 
     return res.send(tasks);
   } catch (error) {
@@ -53,13 +54,13 @@ export const taskFoProject = async (
 };
 
 
-export const adjunctFoTask= async( req: Request,
-    res: Response,
-    )=>{
-        try {
-            const adjunct=await TaskAdjunctSchema.find({taskId:req.body.taskId},{__v:0})
-            return res.send(adjunct)
-        } catch (error) {
-            console.log(error);
-        }
-    }
+export const adjunctFoTask = async (req: Request,
+  res: Response,
+) => {
+  try {
+    const adjunct = await TaskAdjunctSchema.find({ taskId: req.body.taskId }, { __v: 0 })
+    return res.send(adjunct)
+  } catch (error) {
+    console.log(error);
+  }
+}

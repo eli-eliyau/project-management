@@ -11,7 +11,6 @@ const CreateProject = () => {
     users: "משתמשים",
     topUser: "משתמש מוביל",
     projectDescription: "תיאור הפרויקט",
-    projectClient: "לקוח הפרויקט",
     projectTeam: "צוות הפרויקט",
 
   };

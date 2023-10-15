@@ -6,9 +6,9 @@ import {
   Divider,
   Icon,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { buttonChat } from "./HeaderBar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export interface ListButtonsProps {
   listButtons: {
@@ -20,8 +20,13 @@ export interface ListButtonsProps {
 
 const ListButtonsBar = ({ listButtons }: ListButtonsProps) => {
   const navigte = useNavigate();
+  const location = useLocation();
+
   const [pressed, setPressed] = useState<number>();
 
+  useEffect(() => {
+    location.pathname === "/projects" && setPressed(0);
+  }, [location.pathname]);
   let size = -1;
 
   return (
@@ -80,7 +85,6 @@ const ListButtonsBar = ({ listButtons }: ListButtonsProps) => {
                   bgcolor: index === size ? "#ffff" : "transparent",
                 }}
               />
-              
             </>
           );
         })}

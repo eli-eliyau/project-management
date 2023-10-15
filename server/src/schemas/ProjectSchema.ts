@@ -8,7 +8,7 @@ export interface IProject {
   users: string;
   topUser: string;
   projectDescription: string;
-  projectTeam: string;
+  projectTeam: string[];
   projectClient:string
   dateCreated: {
     type: string,
@@ -22,13 +22,12 @@ const projectSchema: Schema = new Schema({
   users: { type: String }, //האם יש משתמשים
   topUser: { type: String }, //משתמש מוביל
   projectDescription: { type: String, required: true }, //תיאור הפרוקייט
-  projectTeam: { type: String, required: true }, //צוות הפרוייקט
-  projectClient: { type: String, required: true },//לקוח הפרוייקט
-  projectUsers:{ type:[String]},
+  projectTeam: { type:[{id: String, name: String}], required: true }, //צוות הפרוייקט
   dateCreated: {
     type: Date,default:new Date
   },
 });
+
 const ProjectSchema = mongoose.model<IProject>(
   "projects-pages",
   projectSchema

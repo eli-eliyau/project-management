@@ -19,7 +19,7 @@ export interface Data {
   users: string;
   topUser: string;
   projectDescription: string;
-  projectTeam: string;
+  projectTeam: string[];
   projectClient: string;
 }
 
@@ -39,7 +39,7 @@ const ProjectDetails = ({ projectId }: Props) => {
     sendReqPost({ projectId: projectId }, "/projectPage")
       .then((res) => {
         console.log(res);
-        
+
         setProjectData(res);
         //   setRefreshingforProject(false);
       })
@@ -57,6 +57,7 @@ const ProjectDetails = ({ projectId }: Props) => {
     "צוות הפרוייקט",
     "לקוח הפרוייקט",
   ];
+console.log(projectData);
 
   return (
     <Grid
@@ -88,53 +89,65 @@ const ProjectDetails = ({ projectId }: Props) => {
 
           return (
             <>
-              {value !== projectData._id && (
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  width={"100%"}
-                  key={index}
-                >
-                  <Grid
-                    item
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                    width={"90%"}
-                  >
-                    <Divider
-                      orientation="horizontal"
-                      flexItem
-                      sx={{ bgcolor: "#83C1ED" }}
-                    />
-                    <Typography variant="h6">{nameDetails[index]}</Typography>
-                    <Typography
-                      sx={{
-                        wordWrap: "break-word",
-                        whiteSpace: "pre-line",
-                      }}
+              {
+              // key === "projectTeam"
+              //   ? console.log(1)
+              //   : 
+                value !== projectData._id && (
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      width={"100%"}
+                      key={index}
                     >
-                      {value}
-                    </Typography>
-                  </Grid>
+                      <Grid
+                        item
+                        direction="column"
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                        width={"90%"}
+                      >
+                        <Divider
+                          orientation="horizontal"
+                          flexItem
+                          sx={{ bgcolor: "#83C1ED" }}
+                        />
+                        <Typography variant="h6">
+                          {nameDetails[index]}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            wordWrap: "break-word",
+                            whiteSpace: "pre-line",
+                          }}
+                        >
+                          {key === "projectTeam" ? value.map((item:any)=>(
+                           `${ item.name},`
+                            
+                          )
 
-                  <Grid item>
-                    <Button
-                      onClick={() => {
-                        setItems({ [key]: value, id });
-                        setIndex(index);
-                        setOpen(true);
-                      }}
-                    >
-                      <EditIcon htmlColor="#0661A2" />
-                    </Button>
-                  </Grid>
+                          ) :
+                          value}
+                        </Typography>
+                      </Grid>
 
-                  {/* <Api task={task} /> */}
-                </Grid>
-              )}
+                      <Grid item>
+                        <Button
+                          onClick={() => {
+                            setItems({ [key]: value, id });
+                            setIndex(index);
+                            setOpen(true);
+                          }}
+                        >
+                          <EditIcon htmlColor="#0661A2" />
+                        </Button>
+                      </Grid>
+
+                      {/* <Api task={task} /> */}
+                    </Grid>
+                  )}
             </>
           );
         })}

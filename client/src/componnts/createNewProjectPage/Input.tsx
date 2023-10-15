@@ -27,10 +27,9 @@ interface Project {
   users: string;
   topUser: string;
   projectDescription: string;
-  projectTeam: string;
   projectClient: string;
   dadeCreated: Date;
-  projectUsers: string[];
+  projectTeam: string[];
 }
 interface Form {
   newProject: Project;
@@ -51,6 +50,7 @@ const InpotForm = ({ item }: Props) => {
   });
 
   const onSubmit: SubmitHandler<Form> = (data) => {
+    console.log(data);
     
     sendReqPost(data, "/createNewProject").then((res) => {
       alert("הפרויקט נוסף בהצלחה");
