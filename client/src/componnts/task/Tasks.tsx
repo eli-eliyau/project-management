@@ -15,7 +15,7 @@ import { projectId } from "../../recoilAtom/Atoms";
 import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
 import { cacheRtl, theme } from "../logn/SignIn";
-import ModalEdit from "../projectPage/ModalEdit";
+import ModalEdit from "../projectPage/modal/ModalEdit";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ToggleButton from "@mui/material/ToggleButton";

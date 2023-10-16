@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import ModalEdit from "./ModalEdit";
+import ModalEdit from "./modal/ModalEdit";
 
 export interface Data {
   _id: string;
@@ -19,7 +19,7 @@ export interface Data {
   users: string;
   topUser: string;
   projectDescription: string;
-  projectTeam: string[];
+  projectTeam: { id: string; name: string }[];
   projectClient: string;
 }
 
@@ -38,10 +38,9 @@ const ProjectDetails = ({ projectId }: Props) => {
     //בקשה לקבל את הנתונים של המפרויקט
     sendReqPost({ projectId: projectId }, "/projectPage")
       .then((res) => {
-        console.log(res);
+        
 
         setProjectData(res);
-        //   setRefreshingforProject(false);
       })
       .catch((err) => console.log(err));
   }, [open, projectId]);
@@ -57,7 +56,6 @@ const ProjectDetails = ({ projectId }: Props) => {
     "צוות הפרוייקט",
     "לקוח הפרוייקט",
   ];
-console.log(projectData);
 
   return (
     <Grid
@@ -89,65 +87,59 @@ console.log(projectData);
 
           return (
             <>
-              {
-              // key === "projectTeam"
-              //   ? console.log(1)
-              //   : 
-                value !== projectData._id && (
-                    <Grid
-                      container
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      width={"100%"}
-                      key={index}
+              {value !== projectData._id && (
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  width={"100%"}
+                  key={index}
+                >
+                  <Grid
+                    item
+                    direction="column"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                    width={"90%"}
+                  >
+                    <Divider
+                      orientation="horizontal"
+                      flexItem
+                      sx={{ bgcolor: "#83C1ED" }}
+                    />
+                    <Typography variant="h6">{nameDetails[index]}</Typography>
+                    <Typography
+                      sx={{
+                        wordWrap: "break-word",
+                        whiteSpace: "pre-line",
+                      }}
                     >
-                      <Grid
-                        item
-                        direction="column"
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
-                        width={"90%"}
-                      >
-                        <Divider
-                          orientation="horizontal"
-                          flexItem
-                          sx={{ bgcolor: "#83C1ED" }}
-                        />
-                        <Typography variant="h6">
-                          {nameDetails[index]}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            wordWrap: "break-word",
-                            whiteSpace: "pre-line",
-                          }}
-                        >
-                          {key === "projectTeam" ? value.map((item:any)=>(
-                           `${ item.name},`
-                            
-                          )
+                      {key === "projectTeam"
+                        ? value.map((item: any) => `${item.name},`)
+                        : value}
+                    </Typography>
+                  </Grid>
 
-                          ) :
-                          value}
-                        </Typography>
-                      </Grid>
+                  <Grid item>
+                    <Button
+                      onClick={() => {
+                        key === "projectTeam"
+                          ? projectData.projectTeam.map((item) =>
+                              setItems({ [item.name]: item.id, id })
+                            )
+                          : setItems({ [key]: value, id });
+                        setIndex(index);
+                        setOpen(true);
+                      }}
+                    >
+                      <EditIcon htmlColor="#0661A2" />
+                    </Button>
+                  </Grid>
 
-                      <Grid item>
-                        <Button
-                          onClick={() => {
-                            setItems({ [key]: value, id });
-                            setIndex(index);
-                            setOpen(true);
-                          }}
-                        >
-                          <EditIcon htmlColor="#0661A2" />
-                        </Button>
-                      </Grid>
-
-                      {/* <Api task={task} /> */}
-                    </Grid>
-                  )}
+                  {/* <Api task={task} /> */}
+                </Grid>
+              )}
             </>
           );
         })}

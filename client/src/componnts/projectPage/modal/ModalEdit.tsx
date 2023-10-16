@@ -1,13 +1,14 @@
-import { Button, Grid, Paper, TextField } from "@mui/material";
+import { Button, Chip, Grid, Paper, TextField } from "@mui/material";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
-import { cacheRtl, theme } from "../logn/SignIn";
+import { cacheRtl, theme } from "../../logn/SignIn";
 import { useForm } from "react-hook-form";
-import { sendReqPut } from "../../axios";
-import { Task } from "../task/Tasks";
+import { sendReqPut } from "../../../axios";
+import { Task } from "../../task/Tasks";
+import ChipsArray from "./Chip";
 
 interface Props {
   onClose: Function;
@@ -23,6 +24,7 @@ const ModalEdit = ({ onClose, items, nameInput, typeModal }: Props) => {
   const [data, setData] = React.useState<{
     [index: string]: string;
   }>(items);
+console.log(items);
 
   const {
     register,
@@ -80,20 +82,24 @@ const ModalEdit = ({ onClose, items, nameInput, typeModal }: Props) => {
               borderRadius: "20px 20px 20px 20px",
             }}
           >
-            <TextField
-              variant="standard"
-              value={Object.values(data)[0]}
-              label={nameInput}
-              type="text"
-              {...register("item", {
-                // maxLength: { value: 10, message: "שם המלא עד 10 תויים" },
-              })}
-              onChange={(e) =>
-                setData({
-                  [Object.keys(data)[0]]: e.target.value,
-                })
-              }
-            />
+            {Object.keys(data)[0] === "projectTeam" ? (
+              <ChipsArray />
+            ) : (
+              <TextField
+                variant="standard"
+                value={Object.values(data)[0]}
+                label={nameInput}
+                type="text"
+                {...register("item", {
+                  // maxLength: { value: 10, message: "שם המלא עד 10 תויים" },
+                })}
+                onChange={(e) =>
+                  setData({
+                    [Object.keys(data)[0]]: e.target.value,
+                  })
+                }
+              />
+            )}
             <Button type="submit">
               <CloudUploadIcon htmlColor="#37fd0089" fontSize="large" />
             </Button>
