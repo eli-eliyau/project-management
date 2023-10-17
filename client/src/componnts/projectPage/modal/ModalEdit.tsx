@@ -12,7 +12,7 @@ import ChipsArray from "./Chip";
 
 interface Props {
   onClose: Function;
-  items: { [index: string]: string };
+  data: any;
   nameInput: string | undefined;
   typeModal: string;
 }
@@ -20,11 +20,10 @@ interface Form {
   item: string;
 }
 
-const ModalEdit = ({ onClose, items, nameInput, typeModal }: Props) => {
-  const [data, setData] = React.useState<{
-    [index: string]: string;
-  }>(items);
-console.log(items);
+const ModalEdit = ({ onClose, data, nameInput, typeModal }: Props) => {
+  // const [modalData, setModalData] = React.useState<[{
+  //   [index: string]: string;
+  // }]>(data);
 
   const {
     register,
@@ -32,14 +31,16 @@ console.log(items);
     formState: { errors },
     setError,
     clearErrors,
-  } = useForm<Form>({
-    defaultValues: {
-      item: Object.values(data)[0],
-    },
-  });
+  } = useForm<Form>(
+  //   {
+  //   defaultValues: {
+  //     item: Object.values(data)[0],
+  //   },
+  // }
+  );
 
   const onSubmit = (dataForm: Form) => {
-    const { id } = items;
+    // const { id } = data;
     let url: string;
 
     url =
@@ -49,16 +50,16 @@ console.log(items);
         ? "/editTask"
         : "";
 
-    sendReqPut(
-      {
-        id,
-        nameRow: Object.keys(data)[0],
-        value: dataForm.item,
-      },
-      `${url}`
-    )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    // sendReqPut(
+    //   {
+    //     id,
+    //     nameRow: Object.keys(data)[0],
+    //     value: dataForm.item,
+    //   },
+    //   `${url}`
+    // )
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
 
     onClose(false);
   };
@@ -82,22 +83,22 @@ console.log(items);
               borderRadius: "20px 20px 20px 20px",
             }}
           >
-            {Object.keys(data)[0] === "projectTeam" ? (
-              <ChipsArray />
+            {nameInput === "צוות הפרוייקט" ? (
+              <ChipsArray data={data} />
             ) : (
               <TextField
                 variant="standard"
-                value={Object.values(data)[0]}
+                value={Object.values(data[0])[0]}
                 label={nameInput}
                 type="text"
                 {...register("item", {
                   // maxLength: { value: 10, message: "שם המלא עד 10 תויים" },
                 })}
-                onChange={(e) =>
-                  setData({
-                    [Object.keys(data)[0]]: e.target.value,
-                  })
-                }
+                // onChange={(e) =>
+                //   setModalData([{
+                //     [Object.keys(data[0])[0]]: e.target.value,
+                //   }])
+                // }
               />
             )}
             <Button type="submit">

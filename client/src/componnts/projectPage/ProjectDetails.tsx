@@ -19,7 +19,7 @@ export interface Data {
   users: string;
   topUser: string;
   projectDescription: string;
-  projectTeam: { id: string; name: string }[];
+  projectTeam: [{ id: string; name: string }];
   projectClient: string;
 }
 
@@ -31,15 +31,15 @@ const ProjectDetails = ({ projectId }: Props) => {
   const [projectData, setProjectData] = React.useState<Data>();
   const [open, setOpen] = React.useState<boolean>(false);
   const [index, setIndex] = React.useState<number>(0);
-  const [items, setItems] = React.useState<{ [key: string]: string }>({});
+  const [items, setItems] = React.useState<
+    [{ [key: string]: string }] | { _id: string; name: string }[]
+  >([{}]);
   let id: string;
 
   React.useEffect(() => {
     //בקשה לקבל את הנתונים של המפרויקט
     sendReqPost({ projectId: projectId }, "/projectPage")
       .then((res) => {
-        
-
         setProjectData(res);
       })
       .catch((err) => console.log(err));
@@ -125,10 +125,8 @@ const ProjectDetails = ({ projectId }: Props) => {
                     <Button
                       onClick={() => {
                         key === "projectTeam"
-                          ? projectData.projectTeam.map((item) =>
-                              setItems({ [item.name]: item.id, id })
-                            )
-                          : setItems({ [key]: value, id });
+                          ? setItems(projectData.projectTeam)
+                          : setItems([{ [key]: value, id }]);
                         setIndex(index);
                         setOpen(true);
                       }}
@@ -148,7 +146,7 @@ const ProjectDetails = ({ projectId }: Props) => {
           <>
             <ModalEdit
               onClose={setOpen}
-              items={items}
+              data={items}
               nameInput={nameDetails[index]}
               typeModal="editProject"
             />

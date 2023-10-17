@@ -35,9 +35,13 @@ const Tasks = () => {
   const [taskList, setTasks] = React.useState<Task[]>();
   const [isActive, setIsActive] = React.useState("פעיל");
   const [openModal, setOpen] = React.useState(false);
-  const [taskToUpdate, setTaskToUpdate] = React.useState<{
-    [index: string]: string;
-  }>();
+  const [taskToUpdate, setTaskToUpdate] = React.useState<
+    [
+      {
+        [index: string]: string;
+      }
+    ]
+  >();
   const [index, setIndex] = React.useState(0);
 
   const id = useRecoilValue(projectId);
@@ -45,8 +49,6 @@ const Tasks = () => {
   let countTaskItem = 0;
 
   React.useEffect(() => {
-    //בקשה לקבל את הנתונים של המפרויקט
-
     sendReqPost({ projectId: id }, "/taskFoProject")
       .then((res) => {
         setTasks(res);
@@ -84,10 +86,12 @@ const Tasks = () => {
       <Typography>{`${primary} - ${value}`}</Typography>
       <Button
         onClick={() => {
-          setTaskToUpdate({
-            [Object.keys(taskFields)[index]]: value,
-            id: taskId,
-          });
+          setTaskToUpdate([
+            {
+              [Object.keys(taskFields)[index]]: value,
+              id: taskId,
+            },
+          ]);
           setIndex(index);
           setOpen(true);
         }}
@@ -217,7 +221,7 @@ const Tasks = () => {
                   <>
                     <ModalEdit
                       onClose={setOpen}
-                      items={taskToUpdate}
+                      data={taskToUpdate}
                       nameInput={Object.values(taskFields)[index]}
                       typeModal="editTask"
                     />
