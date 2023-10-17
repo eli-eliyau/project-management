@@ -1,5 +1,4 @@
-import { Button, Chip, Grid, Paper, TextField } from "@mui/material";
-import React from "react";
+import { Button, Grid, Paper, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ThemeProvider } from "@mui/system";
@@ -7,41 +6,28 @@ import { CacheProvider } from "@emotion/react";
 import { cacheRtl, theme } from "../../logn/SignIn";
 import { useForm } from "react-hook-form";
 import { sendReqPut } from "../../../axios";
-import { Task } from "../../task/Tasks";
 import ChipsArray from "./Chip";
+import { ChipData, ModalProps, UpdateProjectData } from "../Interface";
+import { useRecoilValue } from "recoil";
+import { atomTaskId, projectId } from "../../../recoilAtom/Atoms";
 
-interface Props {
-  onClose: Function;
-  data: any;
-  nameInput: string | undefined;
-  typeModal: string;
-}
-interface Form {
-  item: string;
-}
+const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
 
-const ModalEdit = ({ onClose, data, nameInput, typeModal }: Props) => {
-  // const [modalData, setModalData] = React.useState<[{
-  //   [index: string]: string;
-  // }]>(data);
+  const pId = useRecoilValue(projectId);
+  const tId = useRecoilValue(atomTaskId);
+console.log(data);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
-    clearErrors,
-  } = useForm<Form>(
-  //   {
-  //   defaultValues: {
-  //     item: Object.values(data)[0],
-  //   },
-  // }
-  );
-
-  const onSubmit = (dataForm: Form) => {
-    // const { id } = data;
+    setValue,
+  } = useForm();
+ 
+  const onSubmit = (data:UpdateProjectData | ChipData) => {
     let url: string;
+
+    console.log(data);
 
     url =
       typeModal === "editProject"
@@ -50,16 +36,16 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: Props) => {
         ? "/editTask"
         : "";
 
-    // sendReqPut(
-    //   {
-    //     id,
-    //     nameRow: Object.keys(data)[0],
-    //     value: dataForm.item,
-    //   },
-    //   `${url}`
-    // )
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
+    sendReqPut(
+      {
+        id:url === "editProject" ?pId: tId,
+        nameRow:Object.values(data)[0] ?Object.keys(data)[0] : Object.values(data)[0][0].nameRow,
+        value:Object.values(data)[0] 
+      },
+      `${url}`
+    )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 
     onClose(false);
   };
@@ -84,21 +70,18 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: Props) => {
             }}
           >
             {nameInput === "צוות הפרוייקט" ? (
-              <ChipsArray data={data} />
+              <ChipsArray data={data} onData={setValue} />
             ) : (
               <TextField
                 variant="standard"
-                value={Object.values(data[0])[0]}
                 label={nameInput}
                 type="text"
-                {...register("item", {
-                  // maxLength: { value: 10, message: "שם המלא עד 10 תויים" },
+                {...register(`${Object.keys(data[0])[0]}`, {
                 })}
-                // onChange={(e) =>
-                //   setModalData([{
-                //     [Object.keys(data[0])[0]]: e.target.value,
-                //   }])
-                // }
+                onChange={(e) => {
+                
+                  setValue(`${Object.keys(data[0])[0]}`, e.target.value);
+                }}
               />
             )}
             <Button type="submit">

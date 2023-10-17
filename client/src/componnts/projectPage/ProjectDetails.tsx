@@ -10,40 +10,26 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ModalEdit from "./modal/ModalEdit";
+import { Data, UpdateProjectData } from "./Interface";
+import { useRecoilValue } from "recoil";
+import { projectId } from "../../recoilAtom/Atoms";
 
-export interface Data {
-  _id: string;
-  name: string;
-  status: string;
-  situation: string;
-  users: string;
-  topUser: string;
-  projectDescription: string;
-  projectTeam: [{ id: string; name: string }];
-  projectClient: string;
-}
-
-interface Props {
-  projectId: string | undefined;
-}
-
-const ProjectDetails = ({ projectId }: Props) => {
+const ProjectDetails = () => {
   const [projectData, setProjectData] = React.useState<Data>();
   const [open, setOpen] = React.useState<boolean>(false);
   const [index, setIndex] = React.useState<number>(0);
-  const [items, setItems] = React.useState<
-    [{ [key: string]: string }] | { _id: string; name: string }[]
-  >([{}]);
-  let id: string;
+  const [items, setItems] = React.useState<UpdateProjectData>([{s:"s"}]);
+  const id = useRecoilValue(projectId);
+
 
   React.useEffect(() => {
     //בקשה לקבל את הנתונים של המפרויקט
-    sendReqPost({ projectId: projectId }, "/projectPage")
+    sendReqPost({ projectId: id }, "/projectPage")
       .then((res) => {
         setProjectData(res);
       })
       .catch((err) => console.log(err));
-  }, [open, projectId]);
+  }, [open,id]);
 
   const nameDetails = [
     "id",
@@ -83,7 +69,7 @@ const ProjectDetails = ({ projectId }: Props) => {
 
       {projectData &&
         Object.entries(projectData).map(([key, value], index) => {
-          id = projectData._id;
+          // ids = projectData._id;
 
           return (
             <>
@@ -124,9 +110,14 @@ const ProjectDetails = ({ projectId }: Props) => {
                   <Grid item>
                     <Button
                       onClick={() => {
-                        key === "projectTeam"
-                          ? setItems(projectData.projectTeam)
-                          : setItems([{ [key]: value, id }]);
+                      if( key === "projectTeam") {
+                          projectData.projectTeam.map((item)=>{
+                            item[`nameRow`]="projectTeam"
+                          })
+                          setItems(projectData.projectTeam)
+                          }
+                          
+                          else setItems([{ [key]: value }]);
                         setIndex(index);
                         setOpen(true);
                       }}

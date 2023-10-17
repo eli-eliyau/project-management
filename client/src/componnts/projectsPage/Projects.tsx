@@ -16,11 +16,9 @@ interface Projects {
   dateCreated: Date;
 }
 
-interface Props {
-  onProjectId: Function;
-}
 
-const Project = ({ onProjectId }: Props) => {
+
+const Project = () => {
   const [projects, setProjects] = useState<Projects[]>();
   const [progress, setProgress] = useState(0);
   const setId =useSetRecoilState(projectId)
@@ -101,7 +99,6 @@ const Project = ({ onProjectId }: Props) => {
           >
             <Button
               onClick={() => {
-                onProjectId(element._id);
                 setId(element._id)
                 navigate("/project");
               }}

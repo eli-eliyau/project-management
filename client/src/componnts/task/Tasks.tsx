@@ -9,17 +9,16 @@ import {
 } from "@mui/material";
 import React from "react";
 import { sendReqDelete, sendReqPost } from "../../axios";
-import dayjs, { Dayjs } from "dayjs";
-import { useRecoilValue } from "recoil";
-import { projectId } from "../../recoilAtom/Atoms";
+import  { Dayjs } from "dayjs";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { atomTaskId, projectId } from "../../recoilAtom/Atoms";
 import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
 import { cacheRtl, theme } from "../logn/SignIn";
 import ModalEdit from "../projectPage/modal/ModalEdit";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { UpdateProjectData } from "../projectPage/Interface";
 
 export interface Task {
   _id: string;
@@ -32,18 +31,15 @@ export interface Task {
 }
 
 const Tasks = () => {
-  const [taskList, setTasks] = React.useState<Task[]>();
+  const [taskList, setTasksList] = React.useState<Task[]>();
   const [isActive, setIsActive] = React.useState("פעיל");
-  const [openModal, setOpen] = React.useState(false);
+  const [openModal, setOpenModal] = React.useState(false);
   const [taskToUpdate, setTaskToUpdate] = React.useState<
-    [
-      {
-        [index: string]: string;
-      }
-    ]
+  UpdateProjectData
   >();
   const [index, setIndex] = React.useState(0);
 
+  const setId =useSetRecoilState(atomTaskId)
   const id = useRecoilValue(projectId);
   let countTask = 0;
   let countTaskItem = 0;
@@ -51,10 +47,10 @@ const Tasks = () => {
   React.useEffect(() => {
     sendReqPost({ projectId: id }, "/taskFoProject")
       .then((res) => {
-        setTasks(res);
+        setTasksList(res);
       })
       .catch((err) => console.log(err));
-  }, [taskList, id]);
+  }, [openModal, id]);
 
   const taskFields = {
     tasks: "משימה",
@@ -75,8 +71,11 @@ const Tasks = () => {
     primary: string,
     value: string,
     taskId: string
-  ) => (
-    <ListItem
+  ) => {
+    setId(taskId)
+
+
+    return <ListItem
       sx={{
         direction: "row",
         justifyContent: "space-between",
@@ -93,13 +92,13 @@ const Tasks = () => {
             },
           ]);
           setIndex(index);
-          setOpen(true);
+          setOpenModal(true);
         }}
       >
         <EditIcon htmlColor="#0661A2" />
       </Button>
     </ListItem>
-  );
+  };
 
   return (
     <CacheProvider value={cacheRtl}>
@@ -180,9 +179,11 @@ const Tasks = () => {
                             <Typography variant="h5">{`${
                               Object.values(taskFields)[countTaskItem++]
                             } ${++countTask}`}</Typography>
+
                             <Button onClick={() => deleteTask(key._id)}>
                               <DeleteIcon htmlColor="#0661A2" />
                             </Button>
+
                           </ListItem>
                           {renderTaskField(
                             countTaskItem,
@@ -216,11 +217,11 @@ const Tasks = () => {
                   );
                 })}
               </List>
-              {openModal && taskToUpdate && (
+              {openModal  && (
                 <Modal open={openModal} sx={{ background: "#5be6f841" }}>
                   <>
                     <ModalEdit
-                      onClose={setOpen}
+                      onClose={setOpenModal}
                       data={taskToUpdate}
                       nameInput={Object.values(taskFields)[index]}
                       typeModal="editTask"

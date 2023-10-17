@@ -1,64 +1,56 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Chip from '@mui/material/Chip';
-import Paper from '@mui/material/Paper';
-import TagFacesIcon from '@mui/icons-material/TagFaces';
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Chip from "@mui/material/Chip";
+import Paper from "@mui/material/Paper";
+import TagFacesIcon from "@mui/icons-material/TagFaces";
+import { ChipData, ChipsProps, UpdateProjectData } from "../Interface";
 
-interface Props {
-  data: {
-    name: string;
-    _id: string; 
-  }[];
-  // onData:Function
-}
-
-interface ChipData {
-  name: string;
-  _id: string;
-}
-
-const ListItem = styled('li')(({ theme }) => ({
-  margin: theme.spacing(0.5), 
+const ListItem = styled("li")(({ theme }) => ({
+  margin: theme.spacing(0.5),
 }));
 
-export default function ChipsArray({data}: Props) {
-
-  const [chipData, setChipData] = React.useState<ChipData[]>(data);
+const ChipsArray = ({ data, onData }: ChipsProps) => {
+  const [chipData, setChipData] = React.useState<UpdateProjectData>(data);
 
   const handleDelete = (chipToDelete: ChipData) => {
-    setChipData(chips => 
-      chips.filter(chip => chip._id !== chipToDelete._id)
+    setChipData((chips) =>
+      chips.filter((chip) => chip._id !== chipToDelete._id)
     );
   };
-  // onData(chipData)
+
+  onData("projectTeam", chipData);
+
   return (
-    <Paper sx={{ 
-      display: 'flex',
-      justifyContent: 'center',
-      flexWrap: 'wrap', 
-      listStyle: 'none',
-      p: 0.5,
-      m: 0
-    }}
-    component="ul"
+    <Paper
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        listStyle: "none",
+        p: 0.5,
+        m: 0,
+      }}
+      component="ul"
     >
-      {chipData.map(item => {
+      {chipData.map((item) => {
         let icon;
 
-        if (item.name === 'React') {
+        if (item.name === "React") {
           icon = <TagFacesIcon />;
         }
 
         return (
           <ListItem key={item._id}>
-            <Chip 
+            <Chip
               icon={icon}
               label={item.name}
-              onDelete={() => handleDelete(item)} 
+              onDelete={() => handleDelete(item)}
             />
           </ListItem>
         );
       })}
     </Paper>
   );
-}
+};
+
+export default ChipsArray;

@@ -108,11 +108,11 @@ const RoutesFront = () => {
                 <Route path="*" element={<Navigate to="/projects" replace />} />
                 <Route
                   path="/projects"
-                  element={<Project onProjectId={setProjectId} />}
+                  element={<Project  />}
                 />
                 <Route
                   path="/project"
-                  element={<ProjectPage id={projectId} />}
+                  element={<ProjectPage  />}
                 />
                 <Route path="/create-new-project" element={<CreateProject />} />
                 <Route path="/create-new-task" element={<NewTask />} />

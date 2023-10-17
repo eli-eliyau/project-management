@@ -3,11 +3,9 @@ import { Grid } from "@mui/material";
 import Api from "../../api/Api";
 import ProjectDetails from "./ProjectDetails";
 
-interface Props {
-  id: string | undefined;
-}
 
-const ProjectPage = ({ id }: Props) => {
+
+const ProjectPage = () => {
   return (
     <>
       <Grid
@@ -18,7 +16,7 @@ const ProjectPage = ({ id }: Props) => {
           p: 8,
         }}
       >
-        <ProjectDetails projectId={id} />
+        <ProjectDetails  />
       </Grid>
     </>
   );
