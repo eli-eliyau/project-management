@@ -11,8 +11,23 @@ import { ChipData, ModalProps, UpdateProjectData } from "../Interface";
 import { useRecoilValue } from "recoil";
 import { atomTaskId, projectId } from "../../../recoilAtom/Atoms";
 import InputDate from "../../task/InputDate";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { useState } from "react";
+import SelectInput from "../../createNewProjectPage/SelectInput";
+
+interface TeamMember {
+  name: string;
+  nameRow: string;
+  _id: string;
+}
+
+interface ProjectData {
+  projectTeam: (TeamMember | string)[];
+}
 
 const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
+  const [openAddUser, setOpenAddUser] = useState<boolean>(false);
+
   const pId = useRecoilValue(projectId);
   const tId = useRecoilValue(atomTaskId);
   // console.log(data);
@@ -20,9 +35,10 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm<any>();
 
   const onSubmit = (data: UpdateProjectData | ChipData) => {
     let url: string;
@@ -36,18 +52,18 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
         ? "/editTask"
         : "";
 
-    sendReqPut(
-      {
-        id: url === "editProject" ? pId : tId,
-        nameRow: Object.values(data)[0]
-          ? Object.keys(data)[0]
-          : Object.values(data)[0][0].nameRow,
-        value: Object.values(data)[0],
-      },
-      `${url}`
-    )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    // sendReqPut(
+    //   {
+    //     id: url === "editProject" ? pId : tId,
+    //     nameRow: Object.values(data)[0]
+    //       ? Object.keys(data)[0]
+    //       : Object.values(data)[0][0].nameRow,
+    //     value: Object.values(data)[0],
+    //   },
+    //   `${url}`
+    // )
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
 
     onClose(false);
   };
@@ -64,6 +80,7 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
         >
           <Paper
             sx={{
+              width: 200,
               maxWidth: 360,
               p: 2,
               boxShadow: 10,
@@ -72,7 +89,20 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
             }}
           >
             {nameInput === "צוות הפרוייקט" ? (
-              <ChipsArray data={data} onData={setValue} />
+              <>
+                <ChipsArray data={data} onData={setValue} />
+                {openAddUser && (
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{ mt: 2 }}
+                  >
+                    <SelectInput control={control} />
+                  </Grid>
+                )}
+              </>
             ) : nameInput === "תאריך התחלה" || nameInput === "תאריך סיום" ? (
               <InputDate
                 label={`${nameInput}`}
@@ -91,11 +121,23 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
               />
             )}
             <Button type="submit">
-              <CloudUploadIcon htmlColor="#37fd0089" fontSize="large" />
+              <CloudUploadIcon htmlColor="#1976d2" fontSize="large" />
             </Button>
-            <Button type="button" onClick={() => onClose(false)}>
-              <CloseIcon htmlColor="#ff0000" fontSize="medium" />
+            <Button
+              type="button"
+              onClick={() => {
+                setOpenAddUser(false);
+                onClose(false);
+              }}
+            >
+              <CloseIcon htmlColor="#121212" fontSize="medium" />
             </Button>
+
+            {nameInput === "צוות הפרוייקט" && (
+              <Button type="button" onClick={() => setOpenAddUser(true)}>
+                <GroupAddIcon />
+              </Button>
+            )}
           </Paper>
         </Grid>
       </ThemeProvider>

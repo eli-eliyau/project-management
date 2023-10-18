@@ -69,7 +69,6 @@ const ProjectDetails = () => {
 
       {projectData ? (
         Object.entries(projectData).map(([key, value], index) => {
-
           return (
             <>
               {value !== projectData._id && (
@@ -114,7 +113,8 @@ const ProjectDetails = () => {
                             item[`nameRow`] = "projectTeam";
                           });
                           setItems(projectData.projectTeam);
-                        } else setItems([{ [key]: value }]);
+                        } 
+                        else setItems([{ [key]: value }]);
                         setIndex(index);
                         setOpen(true);
                       }}
@@ -130,12 +130,14 @@ const ProjectDetails = () => {
           );
         })
       ) : (
-        <CircularProgress sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '40%',
-          transform: 'translate(-50%, -50%)',
-        }}/>
+        <CircularProgress
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "40%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
       )}
       {open && (
         <Modal open={open} sx={{ background: "#5be6f841" }}>
