@@ -10,12 +10,12 @@ import ChipsArray from "./Chip";
 import { ChipData, ModalProps, UpdateProjectData } from "../Interface";
 import { useRecoilValue } from "recoil";
 import { atomTaskId, projectId } from "../../../recoilAtom/Atoms";
+import InputDate from "../../task/InputDate";
 
 const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
-
   const pId = useRecoilValue(projectId);
   const tId = useRecoilValue(atomTaskId);
-console.log(data);
+  // console.log(data);
 
   const {
     register,
@@ -23,8 +23,8 @@ console.log(data);
     formState: { errors },
     setValue,
   } = useForm();
- 
-  const onSubmit = (data:UpdateProjectData | ChipData) => {
+
+  const onSubmit = (data: UpdateProjectData | ChipData) => {
     let url: string;
 
     console.log(data);
@@ -38,9 +38,11 @@ console.log(data);
 
     sendReqPut(
       {
-        id:url === "editProject" ?pId: tId,
-        nameRow:Object.values(data)[0] ?Object.keys(data)[0] : Object.values(data)[0][0].nameRow,
-        value:Object.values(data)[0] 
+        id: url === "editProject" ? pId : tId,
+        nameRow: Object.values(data)[0]
+          ? Object.keys(data)[0]
+          : Object.values(data)[0][0].nameRow,
+        value: Object.values(data)[0],
       },
       `${url}`
     )
@@ -62,7 +64,7 @@ console.log(data);
         >
           <Paper
             sx={{
-              maxWidth: 325,
+              maxWidth: 360,
               p: 2,
               boxShadow: 10,
               borderBottom: "3px solid #acacac",
@@ -71,15 +73,19 @@ console.log(data);
           >
             {nameInput === "צוות הפרוייקט" ? (
               <ChipsArray data={data} onData={setValue} />
+            ) : nameInput === "תאריך התחלה" || nameInput === "תאריך סיום" ? (
+              <InputDate
+                label={`${nameInput}`}
+                name="endDate"
+                onDate={setValue}
+              />
             ) : (
               <TextField
                 variant="standard"
                 label={nameInput}
                 type="text"
-                {...register(`${Object.keys(data[0])[0]}`, {
-                })}
+                {...register(`${Object.keys(data[0])[0]}`, {})}
                 onChange={(e) => {
-                
                   setValue(`${Object.keys(data[0])[0]}`, e.target.value);
                 }}
               />

@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Divider,
   Grid,
   List,
@@ -9,7 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { sendReqDelete, sendReqPost } from "../../axios";
-import  { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { atomTaskId, projectId } from "../../recoilAtom/Atoms";
 import { ThemeProvider } from "@mui/system";
@@ -34,12 +35,10 @@ const Tasks = () => {
   const [taskList, setTasksList] = React.useState<Task[]>();
   const [isActive, setIsActive] = React.useState("פעיל");
   const [openModal, setOpenModal] = React.useState(false);
-  const [taskToUpdate, setTaskToUpdate] = React.useState<
-  UpdateProjectData
-  >();
+  const [taskToUpdate, setTaskToUpdate] = React.useState<UpdateProjectData>();
   const [index, setIndex] = React.useState(0);
 
-  const setId =useSetRecoilState(atomTaskId)
+  const setId = useSetRecoilState(atomTaskId);
   const id = useRecoilValue(projectId);
   let countTask = 0;
   let countTaskItem = 0;
@@ -52,6 +51,12 @@ const Tasks = () => {
       .catch((err) => console.log(err));
   }, [openModal, id]);
 
+  const deleteTask = (id: string) => {
+    sendReqDelete({ id }, "/deleteTask")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   const taskFields = {
     tasks: "משימה",
     taskDescription: "תיאור המשימה",
@@ -60,44 +65,39 @@ const Tasks = () => {
     taskStatus: "סטטוס משימה",
   };
 
-  const deleteTask = (id: string) => {
-    sendReqDelete({ id }, "/deleteTask")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
-
   const renderTaskField = (
     index: number,
     primary: string,
     value: string,
     taskId: string
   ) => {
-    setId(taskId)
+    setId(taskId);
 
-
-    return <ListItem
-      sx={{
-        direction: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <Typography>{`${primary} - ${value}`}</Typography>
-      <Button
-        onClick={() => {
-          setTaskToUpdate([
-            {
-              [Object.keys(taskFields)[index]]: value,
-              id: taskId,
-            },
-          ]);
-          setIndex(index);
-          setOpenModal(true);
+    return (
+      <ListItem
+        sx={{
+          direction: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <EditIcon htmlColor="#0661A2" />
-      </Button>
-    </ListItem>
+        <Typography>{`${primary} - ${value}`}</Typography>
+        <Button
+          onClick={() => {
+            setTaskToUpdate([
+              {
+                [Object.keys(taskFields)[index]]: value,
+                id: taskId,
+              },
+            ]);
+            setIndex(index);
+            setOpenModal(true);
+          }}
+        >
+          <EditIcon htmlColor="#0661A2" />
+        </Button>
+      </ListItem>
+    );
   };
 
   return (
@@ -162,62 +162,72 @@ const Tasks = () => {
             </Grid>
 
             <Grid item>
-              <List>
-                {taskList?.map((key, index) => {
-                  countTaskItem = 0;
-                  return (
-                    <>
-                      {key.taskStatus === isActive && (
-                        <div key={index}>
-                          <ListItem
-                            sx={{
-                              direction: "row",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                            }}
-                          >
-                            <Typography variant="h5">{`${
-                              Object.values(taskFields)[countTaskItem++]
-                            } ${++countTask}`}</Typography>
+              {taskList ? (
+                <List>
+                  {taskList?.map((key, index) => {
+                    countTaskItem = 0;
+                    return (
+                      <>
+                        {key.taskStatus === isActive && (
+                          <div key={index}>
+                            <ListItem
+                              sx={{
+                                direction: "row",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Typography variant="h5">{`${
+                                Object.values(taskFields)[countTaskItem++]
+                              } ${++countTask}`}</Typography>
 
-                            <Button onClick={() => deleteTask(key._id)}>
-                              <DeleteIcon htmlColor="#0661A2" />
-                            </Button>
+                              <Button onClick={() => deleteTask(key._id)}>
+                                <DeleteIcon htmlColor="#0661A2" />
+                              </Button>
+                            </ListItem>
+                            {renderTaskField(
+                              countTaskItem,
+                              Object.values(taskFields)[countTaskItem++],
+                              key.taskDescription,
+                              key._id
+                            )}
+                            {renderTaskField(
+                              countTaskItem,
+                              Object.values(taskFields)[countTaskItem++],
+                              key.startDate.toString(),
+                              key._id
+                            )}
+                            {renderTaskField(
+                              countTaskItem,
+                              Object.values(taskFields)[countTaskItem++],
+                              key.endDate,
+                              key._id
+                            )}
+                            {renderTaskField(
+                              countTaskItem,
+                              Object.values(taskFields)[countTaskItem++],
+                              key.taskStatus,
+                              key._id
+                            )}
 
-                          </ListItem>
-                          {renderTaskField(
-                            countTaskItem,
-                            Object.values(taskFields)[countTaskItem++],
-                            key.taskDescription,
-                            key._id
-                          )}
-                          {renderTaskField(
-                            countTaskItem,
-                            Object.values(taskFields)[countTaskItem++],
-                            key.startDate.toString(),
-                            key._id
-                          )}
-                          {renderTaskField(
-                            countTaskItem,
-                            Object.values(taskFields)[countTaskItem++],
-                            key.endDate,
-                            key._id
-                          )}
-                          {renderTaskField(
-                            countTaskItem,
-                            Object.values(taskFields)[countTaskItem++],
-                            key.taskStatus,
-                            key._id
-                          )}
-
-                          <Divider />
-                        </div>
-                      )}
-                    </>
-                  );
-                })}
-              </List>
-              {openModal  && (
+                            <Divider />
+                          </div>
+                        )}
+                      </>
+                    );
+                  })}
+                </List>
+              ) : (
+                <CircularProgress
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "60%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                />
+              )}
+              {openModal && (
                 <Modal open={openModal} sx={{ background: "#5be6f841" }}>
                   <>
                     <ModalEdit

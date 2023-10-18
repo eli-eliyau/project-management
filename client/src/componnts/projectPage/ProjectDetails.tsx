@@ -2,6 +2,7 @@ import React from "react";
 import { sendReqPost } from "../../axios";
 import {
   Button,
+  CircularProgress,
   Divider,
   Grid,
   Modal,
@@ -18,9 +19,8 @@ const ProjectDetails = () => {
   const [projectData, setProjectData] = React.useState<Data>();
   const [open, setOpen] = React.useState<boolean>(false);
   const [index, setIndex] = React.useState<number>(0);
-  const [items, setItems] = React.useState<UpdateProjectData>([{s:"s"}]);
+  const [items, setItems] = React.useState<UpdateProjectData>([{ s: "s" }]);
   const id = useRecoilValue(projectId);
-
 
   React.useEffect(() => {
     //בקשה לקבל את הנתונים של המפרויקט
@@ -29,7 +29,7 @@ const ProjectDetails = () => {
         setProjectData(res);
       })
       .catch((err) => console.log(err));
-  }, [open,id]);
+  }, [open, id]);
 
   const nameDetails = [
     "id",
@@ -67,9 +67,8 @@ const ProjectDetails = () => {
         תוכן הפרויקט
       </Typography>
 
-      {projectData &&
+      {projectData ? (
         Object.entries(projectData).map(([key, value], index) => {
-          // ids = projectData._id;
 
           return (
             <>
@@ -110,14 +109,12 @@ const ProjectDetails = () => {
                   <Grid item>
                     <Button
                       onClick={() => {
-                      if( key === "projectTeam") {
-                          projectData.projectTeam.map((item)=>{
-                            item[`nameRow`]="projectTeam"
-                          })
-                          setItems(projectData.projectTeam)
-                          }
-                          
-                          else setItems([{ [key]: value }]);
+                        if (key === "projectTeam") {
+                          projectData.projectTeam.map((item) => {
+                            item[`nameRow`] = "projectTeam";
+                          });
+                          setItems(projectData.projectTeam);
+                        } else setItems([{ [key]: value }]);
                         setIndex(index);
                         setOpen(true);
                       }}
@@ -131,7 +128,15 @@ const ProjectDetails = () => {
               )}
             </>
           );
-        })}
+        })
+      ) : (
+        <CircularProgress sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '40%',
+          transform: 'translate(-50%, -50%)',
+        }}/>
+      )}
       {open && (
         <Modal open={open} sx={{ background: "#5be6f841" }}>
           <>

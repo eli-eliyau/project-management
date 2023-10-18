@@ -17,6 +17,7 @@ import { sendReqPost } from "../../axios";
 import { useRecoilValue } from "recoil";
 import { projectId } from "../../recoilAtom/Atoms";
 import { useNavigate } from "react-router-dom";
+import InputDate from "./InputDate";
 
 interface FormData {
   projectId: string;
@@ -39,12 +40,9 @@ const NewTask = () => {
     },
   });
 
-  const [valueStartDate, setValueStartDate] = useState<Date | null>(null);
 
-  const [valueEndDate, setValueEndDate] = useState<Date | null>(null);
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
     sendReqPost(data, "/createNewTask").then((res) => {
       console.log(res);
       alert("משימה נוספה בהצלחה");
@@ -110,52 +108,9 @@ const NewTask = () => {
               justifyContent="space-around"
               alignItems="center"
             >
-              <LocalizationProvider
-                dateAdapter={AdapterDateFns}
-                locale={heLocale}
-              >
-                <DatePicker
-                  required
-                  inputFormat="dd/MM/yyyy"
-                  label="תאריך אתחלה"
-                  value={valueStartDate}
-                  renderInput={(props) => (
-                    <TextField variant="standard" {...props} />
-                  )}
-                  InputProps={{
-                    style: {
-                      borderBottom: `1px solid #1259e6`,
-                    },
-                    disableUnderline: true,
-                  }}
-                  {...register("startDate")}
-                  onChange={(date) => {
-                    date && setValue("startDate", date);
-                    setValueStartDate(date);
-                  }}
-                />
-
-                <DatePicker
-                  required
-                  inputFormat="dd/MM/yyyy"
-                  label="תאריך סיום"
-                  value={valueEndDate}
-                  {...register("endDate")}
-                  onChange={(date) => {
-                    date && setValue("endDate", date);
-                    setValueEndDate(date);
-                  }}
-                  renderInput={(props) => (
-                    <TextField variant="standard" {...props} />
-                  )}
-                  InputProps={{
-                    style: {
-                      borderBottom: `1px solid #1259e6`,
-                    },
-                    disableUnderline: true,
-                  }}
-                />
-              </LocalizationProvider>
+              <InputDate label="תאריך אתחלה" name="startDate" onDate={setValue}/>
+              <InputDate label="תאריך סיום" name="endDate" onDate={setValue}/>
+            
             </Grid>
 
             <Button type="submit" sx={{ mt: 1 }}>
