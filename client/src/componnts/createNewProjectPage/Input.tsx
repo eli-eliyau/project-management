@@ -19,7 +19,7 @@ import { sendReqGet, sendReqPost } from "../../axios";
 import { useNavigate } from "react-router-dom";
 import SelectInput from "./SelectInput";
 interface Props {
-  item: Record<string, string>;
+  item: Record<string, string>
 }
 interface Project {
   name: string;
@@ -32,7 +32,7 @@ interface Project {
   projectTeam: string[];
 }
 interface Form {
-  newProject: Project;
+  newProject:  Record<string, string |Date> | string[];
 }
 
 const InpotForm = ({ item }: Props) => {
@@ -41,13 +41,9 @@ const InpotForm = ({ item }: Props) => {
   const {
     register,
     handleSubmit,
-    control,
+    setValue,
     formState: { errors },
-  } = useForm<any>({
-    defaultValues: {
-      newProject: {},
-    },
-  });
+  } = useForm<Form>();
 
   const onSubmit: SubmitHandler<Form> = (data) => {
     console.log(data);
@@ -72,8 +68,7 @@ const InpotForm = ({ item }: Props) => {
           {Object.entries(item).map(([key, value], index) => (
             <>
               {key === "projectTeam" ? (
-                <SelectInput
-                  control={control}
+                <SelectInput name="projectTeam" onDtat={setValue}
                 />
               ) : (
                 <TextField

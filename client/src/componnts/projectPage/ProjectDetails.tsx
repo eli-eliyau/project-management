@@ -17,7 +17,7 @@ import { projectId } from "../../recoilAtom/Atoms";
 
 const ProjectDetails = () => {
   const [projectData, setProjectData] = React.useState<Data>();
-  const [open, setOpen] = React.useState<boolean>(false);
+  const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [index, setIndex] = React.useState<number>(0);
   const [items, setItems] = React.useState<UpdateProjectData>([{ s: "s" }]);
   const id = useRecoilValue(projectId);
@@ -29,7 +29,7 @@ const ProjectDetails = () => {
         setProjectData(res);
       })
       .catch((err) => console.log(err));
-  }, [open, id]);
+  }, [openModal, id]);
 
   const nameDetails = [
     "id",
@@ -109,14 +109,14 @@ const ProjectDetails = () => {
                     <Button
                       onClick={() => {
                         if (key === "projectTeam") {
-                          projectData.projectTeam.map((item) => {
-                            item[`nameRow`] = "projectTeam";
-                          });
+                          projectData.projectTeam.map((item) => 
+                            item[`nameRow`] = "projectTeam"
+                          );
                           setItems(projectData.projectTeam);
                         } 
                         else setItems([{ [key]: value }]);
                         setIndex(index);
-                        setOpen(true);
+                        setOpenModal(true);
                       }}
                     >
                       <EditIcon htmlColor="#0661A2" />
@@ -139,11 +139,11 @@ const ProjectDetails = () => {
           }}
         />
       )}
-      {open && (
-        <Modal open={open} sx={{ background: "#5be6f841" }}>
+      {openModal && (
+        <Modal open={openModal} sx={{ background: "#5be6f841" }}>
           <>
             <ModalEdit
-              onClose={setOpen}
+              onClose={setOpenModal}
               data={items}
               nameInput={nameDetails[index]}
               typeModal="editProject"

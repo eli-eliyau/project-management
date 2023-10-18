@@ -15,35 +15,29 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { useState } from "react";
 import SelectInput from "../../createNewProjectPage/SelectInput";
 
-interface TeamMember {
-  name: string;
-  nameRow: string;
-  _id: string;
-}
-
-interface ProjectData {
-  projectTeam: (TeamMember | string)[];
-}
-
-const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
+const ModalEdit = ({
+  onClose: onCloseModal,
+  data,
+  nameInput,
+  typeModal,
+}: ModalProps) => {
   const [openAddUser, setOpenAddUser] = useState<boolean>(false);
 
   const pId = useRecoilValue(projectId);
   const tId = useRecoilValue(atomTaskId);
   // console.log(data);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-    setValue,
-  } = useForm<any>();
+  const { register, handleSubmit, setValue } = useForm<
+    UpdateProjectData | ChipData
+  >();
 
-  const onSubmit = (data: UpdateProjectData | ChipData) => {
+  const onSubmit = (dataForm: UpdateProjectData | ChipData) => {
     let url: string;
 
-    console.log(data);
+    Object.keys(dataForm)[1] === "addTeam" &&
+      data.map((item: any) => Object.values(dataForm)[1].push(item._id));
+
+    console.log(dataForm);
 
     url =
       typeModal === "editProject"
@@ -52,20 +46,25 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
         ? "/editTask"
         : "";
 
-    // sendReqPut(
-    //   {
-    //     id: url === "editProject" ? pId : tId,
-    //     nameRow: Object.values(data)[0]
-    //       ? Object.keys(data)[0]
-    //       : Object.values(data)[0][0].nameRow,
-    //     value: Object.values(data)[0],
-    //   },
-    //   `${url}`
-    // )
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
-
-    onClose(false);
+    sendReqPut(
+      {
+        id: typeModal === "editProject" ? pId : tId,
+        nameRow: Object.values(dataForm)[1]
+          ? Object.keys(dataForm)[1]
+          : Object.keys(dataForm)[0] === 'projectTeam'
+          ? Object.values(dataForm)[0][0].nameRow
+          : Object.keys(dataForm)[0],
+        value: Object.values(dataForm)[1]
+          ? Object.values(dataForm)[1]
+          : Object.values(dataForm)[0],
+      },
+      `${url}`
+    )
+      .then((res) => {
+        console.log(res);
+        onCloseModal(false);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -99,13 +98,13 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
                     alignItems="center"
                     sx={{ mt: 2 }}
                   >
-                    <SelectInput control={control} />
+                    <SelectInput name="addTeam" onDtat={setValue} />
                   </Grid>
                 )}
               </>
             ) : nameInput === "תאריך התחלה" || nameInput === "תאריך סיום" ? (
               <InputDate
-                label={`${nameInput}`}
+                label={"תאריך סיום"}
                 name="endDate"
                 onDate={setValue}
               />
@@ -126,8 +125,7 @@ const ModalEdit = ({ onClose, data, nameInput, typeModal }: ModalProps) => {
             <Button
               type="button"
               onClick={() => {
-                setOpenAddUser(false);
-                onClose(false);
+                onCloseModal(false);
               }}
             >
               <CloseIcon htmlColor="#121212" fontSize="medium" />

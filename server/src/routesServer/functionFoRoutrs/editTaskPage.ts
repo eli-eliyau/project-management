@@ -10,7 +10,7 @@ export const editTask = async (
 ) => {
   try {
     console.log(req.body);
-    
+
     const changeValueTask = await TaskSchema.updateOne({ _id: new mongoose.Types.ObjectId(req.body.id) },
       { [req.body.nameRow]: req.body.value })
 

@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { sendReqGet } from "../../axios";
 import { Control, Controller, ControllerRenderProps } from "react-hook-form";
@@ -13,11 +13,13 @@ interface FormValues {
 }
 
 interface Props {
-  control: Control<FormValues>;
+ onDtat:Function
+ name:string
 }
 
-const SelectInput = ({ control }:Props) => {
+const SelectInput = ({onDtat,name }:Props) => {
   const [users, setUsers] = useState<Users[]>();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   useEffect(() => {
     sendReqGet({}, "/getAllUsers").then((res) => {
@@ -25,40 +27,32 @@ const SelectInput = ({ control }:Props) => {
     });
   }, []);
 
+  const handleChange = (event:any) => {
+    const ids = event.target.value;
+    setSelectedIds(ids);
+  };
+
+  onDtat(`${name}`,selectedIds)
+
   return (
-    <FormControl sx={{ width: "85%" }}>
-      <InputLabel id="users-select-label" required sx={{ textAlign: "right" }}>
+    <Box sx={{ width: "80%" }}>
+      <InputLabel id="users-select-label" required sx={{ textAlign: "left" }}>
         צוות הפרויקט
       </InputLabel>
-      <Controller
-        name="projectTeam"
-        control={control}
-        defaultValue={[]}
-        render={({ field }: { field: ControllerRenderProps<FormValues, 'projectTeam'> }) => (
-          <Select
-            labelId="users-select-label"
-            id="projectTeam"
-            multiple
-            variant="standard"
-            {...field}
-            renderValue={(selected: string[]) =>
-              selected
-                .map((userId) => {
-                  const user = users?.find((user) => user._id === userId);
-                  return user ? user.name : "User not found";
-                })
-                .join(", ")
-            }
-          >
-            {users?.map((user) => (
-              <MenuItem key={user._id} value={user._id}>
-                {user.name}
-              </MenuItem>
-            ))}
-          </Select>
-        )}
-      />
-    </FormControl>
+      <Select 
+      fullWidth
+      multiple 
+      variant="standard"
+      value={selectedIds}
+      onChange={handleChange}
+    >
+      {users?.map(option => (
+        <MenuItem key={option._id} value={option._id}>
+          {option.name}
+        </MenuItem>
+      ))}
+    </Select>
+    </Box>
   );
 };
 
