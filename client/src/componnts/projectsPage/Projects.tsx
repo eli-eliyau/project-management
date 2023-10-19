@@ -23,7 +23,7 @@ interface Projects {
   dateCreated: Date;
 }
 
-const Project = () => {
+const Projects = () => {
   const [projects, setProjects] = useState<Projects[]>();
   const [progress, setProgress] = useState(0);
   const setId = useSetRecoilState(projectId);
@@ -127,4 +127,4 @@ const Project = () => {
   );
 };
 
-export default Project;
+export default Projects;

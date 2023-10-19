@@ -1,6 +1,8 @@
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Dayjs } from "dayjs";
+import { useEffect } from "react";
+import { sendReqPost } from "../axios";
 
 interface ITask {
   _id: string;
@@ -15,6 +17,9 @@ interface IProps {
   task: ITask[] | undefined;
 }
 const Api = ({ task }: IProps) => {
+
+ 
+
   const numberPercent = (task: ITask[]) => {
     let amountTask: number = 0;
     let counter: number = 0;

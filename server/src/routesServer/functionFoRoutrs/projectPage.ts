@@ -1,17 +1,21 @@
 import { Request, Response, NextFunction } from "express";
-import ProjectsPageSchema, { IProject } from "../../schemas/ProjectSchema";
+import ProjectsSchema, { IProject } from "../../schemas/ProjectSchema";
 import TaskAdjunctSchema from "../../schemas/TaskAdjunctsSchema";
 import TaskSchema from "../../schemas/TaskSchema";
 import dayjs from "dayjs";
 import UsersSchema from "../../schemas/UsersSchema";
+import mongoose from "mongoose";
 //מביא את כל הנתונים על הפרויקט
 export const projectPage = async (
   req: Request,
   res: Response,
 ) => {
   try {
-    const projectData: IProject | null = await ProjectsPageSchema.findOne({
-      _id: req.body.projectId,
+    const projectData: IProject | null = await 
+   
+    
+    ProjectsSchema.findOne({
+      _id: new mongoose.Types.ObjectId(req.body.projectId)
     }, { __v: 0, dateCreated: 0 });
 
     return res.send(projectData);

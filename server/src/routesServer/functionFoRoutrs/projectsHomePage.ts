@@ -1,16 +1,22 @@
 import { Request, Response } from "express";
 import ProjectSchema from "../../schemas/ProjectSchema";
 import UsersSchema from "../../schemas/UsersSchema";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import TaskSchema from "../../schemas/TaskSchema";
+import { ObjectId } from "mongoose";
 
-interface J{
-  _id: Object,
-   name: string,
-   status: string,
-   situation: string,
-   dateCreated:string,
- 
+interface ITask {
+  _id: ObjectId;
+  projectId: string;
+  taskDescription: string;
+  startDate: Dayjs;
+  endDate: Dayjs;
+  taskTag: string;
+  taskStatus: string;
 }
+
+// interface Ids extends Array<Record<string, string>> { }
+
 //מחזיר את כל הפרויקטים לדף הבית אבל רק שם סטטוס ומצב
 export const projectsHomePage = async (req: Request, res: Response) => {
   try {
@@ -43,13 +49,21 @@ export const projectsHomePage = async (req: Request, res: Response) => {
     
     });
    
- 
+
+    const projectsId = projects.map(obj => (obj.id))
+    console.log(
+    getNumberCircle(projectsId)
+
+    );
+    
   
     return res.send(projects);
   } catch (err) {
     console.log(err);
   }
 };
+
+
 //פונקציה שעושה את האימות של התוקן שקביל היוזר בכניסה למערכת לתוקן שנמצא בדאתא
 export const authenticateTheLoginOfAPageUser = async (
   req: Request,
@@ -65,4 +79,26 @@ export const authenticateTheLoginOfAPageUser = async (
   } catch (err) {
     console.error(err);
   }
+};
+
+
+
+const getNumberCircle =(ids:string[]) =>{
+
+   ids.map(async(item)=>{
+    const task = await TaskSchema.find({projectId : item},{__v:0})
+    const num = numberPercent(task)
+    console.log(num);
+
+  })
+
+}
+
+const numberPercent = (tasks: any) => {
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter((task:any )=> task.taskStatus === 'לא פעיל').length;
+
+  const completedTasksPercentage = (completedTasks / totalTasks) * 100;
+
+  return completedTasksPercentage;
 };

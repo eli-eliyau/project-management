@@ -5,7 +5,7 @@ import axios from "axios";
 import SignUp from "../componnts/logn/SignUp";
 import { sendReqPost } from "../axios";
 
-import Project from "../componnts/projectsPage/Projects";
+import Projects from "../componnts/projectsPage/Projects";
 import { Grid, useMediaQuery, AppBar } from "@mui/material";
 import SideBar from "../componnts/bars/SideBar";
 import HeaderBar from "../componnts/bars/HeaderBar";
@@ -83,7 +83,7 @@ const RoutesFront = () => {
               <AppBar
                 position="fixed"
                 sx={{
-                  width: "20%",
+                  width: "15%",
                   height: "100%",
                   zIndex: +1,
                 }}
@@ -108,7 +108,7 @@ const RoutesFront = () => {
                 <Route path="*" element={<Navigate to="/projects" replace />} />
                 <Route
                   path="/projects"
-                  element={<Project  />}
+                  element={<Projects  />}
                 />
                 <Route
                   path="/project"
