@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 //סכמה של הפרוייקט בדף הפרוייקט עצמו כאן חלק מהנתונים רק וצריך ליבא מעוד טבלאות
 
 export interface IProject {
+  _id:string
   name: string;
   status:string
   situation: string;
@@ -10,6 +11,7 @@ export interface IProject {
   projectDescription: string;
   projectTeam: string[];
   projectClient:string
+  percentNumber :number |undefined
   dateCreated: {
     type: string,
   },
@@ -17,7 +19,7 @@ export interface IProject {
 
 const projectSchema: Schema = new Schema({
   name: { type: String, required: true },
-  status: { type: String ,default:"פועל"}, //סטטוס
+  status: { type: String ,default:"פעיל"}, //סטטוס
   situation: { type: String }, //מצב תחזוקה
   users: { type: String }, //האם יש משתמשים
   topUser: { type: String }, //משתמש מוביל

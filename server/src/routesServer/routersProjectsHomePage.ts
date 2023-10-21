@@ -7,4 +7,5 @@ router.get("/projectsHome", projectsHomePage);
 
 //פונקציה שעושה את האימות של התוקן שקביל היוזר בכניסה למערכת לתוקן שנמצא בדאתא
 router.post("/authenticateTheLoginOfAPageUser",authenticateTheLoginOfAPageUser)
+
 export default router;

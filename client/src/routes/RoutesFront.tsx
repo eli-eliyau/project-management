@@ -5,7 +5,7 @@ import axios from "axios";
 import SignUp from "../componnts/logn/SignUp";
 import { sendReqPost } from "../axios";
 
-import Projects from "../componnts/projectsPage/Projects";
+import ProjectsPage from "../componnts/projectsPage/Projects";
 import { Grid, useMediaQuery, AppBar } from "@mui/material";
 import SideBar from "../componnts/bars/SideBar";
 import HeaderBar from "../componnts/bars/HeaderBar";
@@ -108,7 +108,7 @@ const RoutesFront = () => {
                 <Route path="*" element={<Navigate to="/projects" replace />} />
                 <Route
                   path="/projects"
-                  element={<Projects  />}
+                  element={<ProjectsPage  />}
                 />
                 <Route
                   path="/project"

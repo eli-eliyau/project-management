@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import ProjectSchema from "../../schemas/ProjectSchema";
+import ProjectSchema, { IProject } from "../../schemas/ProjectSchema";
 import UsersSchema from "../../schemas/UsersSchema";
 import dayjs, { Dayjs } from "dayjs";
 import TaskSchema from "../../schemas/TaskSchema";
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 
 interface ITask {
-  _id: ObjectId;
+  _id?: string;
   projectId: string;
   taskDescription: string;
   startDate: Dayjs;
@@ -15,12 +15,12 @@ interface ITask {
   taskStatus: string;
 }
 
-// interface Ids extends Array<Record<string, string>> { }
+
 
 //מחזיר את כל הפרויקטים לדף הבית אבל רק שם סטטוס ומצב
 export const projectsHomePage = async (req: Request, res: Response) => {
   try {
-    const projects = await ProjectSchema.find(
+    let projects = await ProjectSchema.find(
       {},
       {
         users: 0,
@@ -36,27 +36,26 @@ export const projectsHomePage = async (req: Request, res: Response) => {
 
       const dateA = dayjs(a.dateCreated.type);
       const dateB = dayjs(b.dateCreated.type);
-    
+
       if (dateA.isBefore(dateB)) {
         return -1;
       }
-    
+
       if (dateA.isAfter(dateB)) {
         return 1;
       }
-    
+
       return 0;
-    
+
     });
-   
+    projects = await getNumberCircle(projects)
+    projects = projects.map((project: any) => {
+      return {
+        ...project._doc,
+        percentNumber: project.percentNumber
+      };
+    });
 
-    const projectsId = projects.map(obj => (obj.id))
-    console.log(
-    getNumberCircle(projectsId)
-
-    );
-    
-  
     return res.send(projects);
   } catch (err) {
     console.log(err);
@@ -72,7 +71,7 @@ export const authenticateTheLoginOfAPageUser = async (
   try {
     let userData = await UsersSchema.findOne(
       { token: req.body.token },
-      { __v:0,pass: 0, dade_created: 0 }
+      { __v: 0, pass: 0, dade_created: 0 }
     );
 
     return res.json(userData);
@@ -83,22 +82,50 @@ export const authenticateTheLoginOfAPageUser = async (
 
 
 
-const getNumberCircle =(ids:string[]) =>{
+const getNumberCircle= async(projects: any)=> {
 
-   ids.map(async(item)=>{
-    const task = await TaskSchema.find({projectId : item},{__v:0})
-    const num = numberPercent(task)
-    console.log(num);
+  try {
 
-  })
+    const getPercentNumber = async (project: any) => {
+
+      const tasks = await TaskSchema.find({ projectId: project._id }, { __v: 0, _id: 0 });
+      const percentNumber = calculatePercentNumber(tasks);
+      return { ...project, percentNumber };
+    }
+
+    const updatedProjects = [];
+
+    for (let i = 0; i < projects.length; i++) {
+      const project = projects[i];
+      const updatedProject = await getPercentNumber(project);
+      updatedProjects.push(updatedProject);
+    }
+
+    return updatedProjects;
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 
 }
 
-const numberPercent = (tasks: any) => {
-  const totalTasks = tasks.length;
-  const completedTasks = tasks.filter((task:any )=> task.taskStatus === 'לא פעיל').length;
+const  calculatePercentNumber = (tasks: any) => {
 
-  const completedTasksPercentage = (completedTasks / totalTasks) * 100;
+  let amountTask: number = 0;
+  let counter: number = 0;
 
-  return completedTasksPercentage;
-};
+  if (tasks?.length) {
+    amountTask = tasks.length;
+  }
+
+  for (const key in tasks) {
+    if (tasks[key].taskStatus === "פעיל") {
+      counter++;
+    }
+  }
+  if (counter === 0) return 100;
+  else return Math.floor((amountTask - counter) * (100 / amountTask));
+
+}
+

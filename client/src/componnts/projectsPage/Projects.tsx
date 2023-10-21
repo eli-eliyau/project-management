@@ -21,35 +21,21 @@ interface Projects {
   status: string;
   situation: string;
   dateCreated: Date;
+  percentNumber: number;
 }
 
-const Projects = () => {
+const ProjectsPage = () => {
   const [projects, setProjects] = useState<Projects[]>();
   const [progress, setProgress] = useState(0);
+
   const setId = useSetRecoilState(projectId);
   const navigate = useNavigate();
-  const circularProgress = () => {
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
-          clearInterval(timer);
-          return 100;
-        }
-        const newProgress = oldProgress + 1;
-        return newProgress;
-      });
-    }, 10);
-    return () => {
-      clearInterval(timer);
-    };
-  };
 
   useEffect(() => {
     sendReqGet({}, "/projectsHome").then((res) => {
       setProjects(res);
+      console.log(res);
     });
-
-    circularProgress();
   }, []);
 
   return (
@@ -90,7 +76,7 @@ const Projects = () => {
               justifyContent="center"
               alignItems="center"
             >
-              <ProgressCircle value={progress} />
+              <ProgressCircle value={element.percentNumber} key={index} />
             </Grid>
 
             <Grid
@@ -116,15 +102,17 @@ const Projects = () => {
           </Grid>
         ))
       ) : (
-        <CircularProgress sx={{
-          position: "absolute",
-          top: "50%",
-          left: "40%",
-          transform: "translate(-50%, -50%)",
-        }}/>
+        <CircularProgress
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "40%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
       )}
     </Box>
   );
 };
 
-export default Projects;
+export default ProjectsPage;
