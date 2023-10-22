@@ -2,7 +2,7 @@ import { Expression } from "mongoose";
 import routersProjectsHomePage from "./routersProjectsHomePage";
 import routersEditTask from "./routersEditTask";
 import routersProjectPage from "./routersProjectPage";
-import routersSignInPage from "./routersSignInPage";
+import routersLogInPage from "./routersSignInPage";
 import routersCreateNewTaskPage from "./routersCreateNewTaskPage";
 import routersEditProjectPage from "./routersEditProjectPage";
 import routersCreateNewProjectPage from "./routersCreateNewProjectPage";
@@ -12,9 +12,9 @@ import routerLoggedOffPage from "./routerLoggedOfPage"
 
 const allRoutes = (app: Expression) => {
   // ראוט להרשמה של יוזר חדש
-  app.use(routerSignUpPage);
+  // app.use(routerSignUpPage);
   //בודק כניסה של משתמש למערכת לפי הטבלה האם הוא קיים
-  app.use(routersSignInPage);
+  app.use(routersLogInPage);
   //ראוטים של דף הבית של הפרויקטים
   app.use(routersProjectsHomePage);
   //ראוטים של דף הפרויקט עצמו

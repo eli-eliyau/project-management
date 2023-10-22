@@ -1,42 +1,73 @@
 import { Request, Response, NextFunction } from "express";
 import UsersSchema, { genToken } from "../../schemas/UsersSchema";
 import jwt from "jsonwebtoken";
+// require('dotenv').config('../../.env')
 
 //הפונקציה מאמתת את הסיסמא של היוזר ויוצרת תוקן ע"י פונקציה
-export const signInPage = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const signInPage = async (req: Request, res: Response) => {
   try {
-    const user =
-      (await UsersSchema.findOne({ name: req.body.name })) ||
-      (await UsersSchema.findOne({ pass: req.body.pass }));
-    if (user) {
-      if (user?.name === req.body.name) {
-        if (user?.pass === req.body.pass) {
-          let newToken = genToken(user?._id);
-          //מכניס את התוקן שנשלח ליוזר בכניסה למערכת גם לדאתא כדי לאמת בכל כניסה לדף בפרונט
-          await UsersSchema.findOneAndUpdate(
-            { _id: user?._id },
-            { token: newToken }
-          );
+    const user = await UsersSchema.findOne({
+      $and: [{ email: req.body.email }, { pass: req.body.pass }]
+    });
 
-          return res.send({ token: newToken });
-        } else {
-          return res.send("סיסמא אינה נכונה");
-        }
-      } else {
-        return res.send("שם משתמש אינו נכון");
-      }
-    } else return res.send("משתמש לא קיים במערכת");
+    if (user === null) {
+
+      return res.send("משתמש לא קיים");
+    }
+
+    const isValid = user.email === req.body.email && user.pass === req.body.pass;
+
+    if (!isValid) {
+      return res.send("שם משתמש או סיסמה שגויים");
+    }
+
+    const token = genToken(user);
+
+    await UsersSchema.findOneAndUpdate(
+      { _id: user._id },
+      { $set: { token: token } }
+    );
+    res.send({ user, token });
+
   } catch (error) {
-    console.log(error);
-    return res.status(401).send(false);
+    console.error(error);
+    res.status(401).send(false);
   }
-};
+}
 
-//פונקציה שעושה אימות לתוקן של יוזר
+
+export const signUpPage = async (req: Request, res: Response) => {
+  try {
+    let user = await UsersSchema.findOne({
+      $or: [{ name: req.body.name }, { pass: req.body.email }]
+    });
+
+    if (user) {
+      console.log("משתמש קיים במערכת");
+
+      return res.send("משתמש קיים במערכת");
+    }
+    else {
+      user = await new UsersSchema(req.body);
+      await user.save();
+      const token = genToken(user);
+
+      await UsersSchema.findOneAndUpdate(
+        { _id: user._id },
+        { $set: { token: token } }
+      );
+
+      user.pass = '****'
+
+      res.send({ user, token });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(401).send(false);
+  }
+}
+
+//פונקציה שעושה אימות לתוקן של יוזרתראה לי
 export const authenticationToken = async (
   req: Request,
   res: Response,
@@ -44,13 +75,13 @@ export const authenticationToken = async (
 ) => {
   try {
     let token: any = req.header("x-api-key");
-    let userId = jwt.verify(token, "ELI");
-
-    req.body.userId = userId;
+    let user = jwt.verify(token, `${process.env.TOKEN}`);
+    user && res.send(true)
+    // req.body.user = user;
   } catch (error) {
     console.log(error);
   }
-  next();
+  // next();
 };
 
 //לאחר אימות התוקן נקבל מהפונקציה הקודמת את התוקן המתורגם שהוא אידי של היוזר ואז נבקש את פרטי היוזר ונחזיר לפרונט
@@ -66,4 +97,22 @@ export const fo = async (req: Request, res: Response) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+
+export const auth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // let token: any = req.header("x-api-key");
+    const token = req.cookies.token;
+    let userId = jwt.verify(token, `${process.env.TOKEN}`);
+
+    req.body.userId = userId;
+  } catch (error) {
+    console.log(error);
+  }
+  next();
 };

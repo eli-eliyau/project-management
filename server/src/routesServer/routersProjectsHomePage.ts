@@ -3,7 +3,7 @@ import { projectsHomePage,authenticateTheLoginOfAPageUser } from "./functionFoRo
 
 const router = Router();
 //מחזיר את כל הפרוקייטים לדף הבית
-router.get("/projectsHome", projectsHomePage);
+router.post("/projectsHome", projectsHomePage);
 
 //פונקציה שעושה את האימות של התוקן שקביל היוזר בכניסה למערכת לתוקן שנמצא בדאתא
 router.post("/authenticateTheLoginOfAPageUser",authenticateTheLoginOfAPageUser)

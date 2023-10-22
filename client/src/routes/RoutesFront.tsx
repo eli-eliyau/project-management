@@ -14,6 +14,7 @@ import ProjectPage from "../componnts/projectPage/ProjectPage";
 import CreateProject from "../componnts/createNewProjectPage/CreateProject";
 import Tasks from "../componnts/task/Tasks";
 import NewTask from "../componnts/task/NewTask";
+import LogIn from "../componnts/logn/LogIn";
 export interface DataProject {
   _id: string;
   name: string;
@@ -30,24 +31,24 @@ const RoutesFront = () => {
     role: string;
   }>();
 
-  useEffect(() => {
-    //בקשה אימות לתוקן שקביל היוזר בכניסה למערכת לתוקן שנימצא בדאתא
-    sendReqPost({ token: userToken }, "/authenticateTheLoginOfAPageUser")
-      .then((res) => {
-        console.log(res);
+  // useEffect(() => {
+  //   //בקשה אימות לתוקן שקביל היוזר בכניסה למערכת לתוקן שנימצא בדאתא
+  //   sendReqPost({ token: userToken }, "/authenticateTheLoginOfAPageUser")
+  //     .then((res) => {
+  //       console.log(res);
 
-        if (res.token) {
-          setUser(res);
-          localStorage.setItem("user", `1`);
-          localStorage.setItem("role", res.role);
-          localStorage.setItem("id", res._id);
-          localStorage.setItem("userName", `${res.name}`);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [userToken]);
+  //       if (res.token) {
+  //         setUser(res);
+  //         localStorage.setItem("user", `1`);
+  //         localStorage.setItem("role", res.role);
+  //         localStorage.setItem("id", res._id);
+  //         localStorage.setItem("userName", `${res.name}`);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // }, [userToken]);
   let userValid = localStorage.getItem("user");
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
@@ -55,15 +56,17 @@ const RoutesFront = () => {
     <Fragment>
       {userValid === null ? (
         <Routes>
-          <Route
+           <Route path="/sign-in" element={<LogIn toUrlServer={"signIn"} />} />
+          <Route path="/sign-up" element={<LogIn toUrlServer={"signUp"} />} />
+          {/* <Route
             path="/login"
             element={<SignIn onUserToken={setUserToken} />}
           />
           <Route
             path="/sing-up"
             element={<SignUp onUserToken={setUserToken} />}
-          />
-          <Route path="*" element={<Navigate replace to="/login" />} />
+          /> */}
+          <Route path="*" element={<Navigate replace to="/sign-in" />} />
         </Routes>
       ) : userValid === `1` ? (
         <>

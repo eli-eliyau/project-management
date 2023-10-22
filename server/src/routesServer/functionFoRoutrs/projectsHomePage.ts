@@ -20,17 +20,21 @@ interface ITask {
 //מחזיר את כל הפרויקטים לדף הבית אבל רק שם סטטוס ומצב
 export const projectsHomePage = async (req: Request, res: Response) => {
   try {
-    let projects = await ProjectSchema.find(
-      {},
-      {
-        users: 0,
-        topUser: 0,
-        projectDescription: 0,
-        projectTeam: 0,
-        projectClient: 0,
-        __v: 0,
+
+    console.log();
+    
+    let projects = await ProjectSchema.find({
+      projectTeam: {
+        $elemMatch: { _id: req.body.id }
       }
-    );
+    }, {
+      users: 0,
+      topUser: 0,
+      projectDescription: 0,
+      projectClient: 0,
+      __v: 0,
+    })
+
 
     projects.sort((a, b) => {
 
@@ -82,7 +86,7 @@ export const authenticateTheLoginOfAPageUser = async (
 
 
 
-const getNumberCircle= async(projects: any)=> {
+const getNumberCircle = async (projects: any) => {
 
   try {
 
@@ -110,7 +114,7 @@ const getNumberCircle= async(projects: any)=> {
 
 }
 
-const  calculatePercentNumber = (tasks: any) => {
+const calculatePercentNumber = (tasks: any) => {
 
   let amountTask: number = 0;
   let counter: number = 0;
