@@ -63,7 +63,7 @@ const LogIn = ({ toUrlServer }: IProps) => {
                   localStorage.setItem("userName", data.user.name);
                   localStorage.setItem("role", data.user.role);
                   localStorage.setItem("token", data.token);
-                  navigate(0);
+                  // navigate(0);
                 } else {
                   setMessage("תוקן לא חוקי");
                 }

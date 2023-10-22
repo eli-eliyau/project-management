@@ -7,7 +7,7 @@ import routersCreateNewTaskPage from "./routersCreateNewTaskPage";
 import routersEditProjectPage from "./routersEditProjectPage";
 import routersCreateNewProjectPage from "./routersCreateNewProjectPage";
 import routersCreateNewAdjunctPage from "./routersCreateNewAdjunctPage";
-import routerSignUpPage from "./routerSignUpPage";
+// import routerSignUpPage from "./routerSignUpPage";
 import routerLoggedOffPage from "./routerLoggedOfPage"
 
 const allRoutes = (app: Expression) => {

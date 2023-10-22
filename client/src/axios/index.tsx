@@ -7,6 +7,7 @@ const sendReqPost = async (data: object | [object], toUrl: string) => {
       method: "post",
       url: `${URL_SERVER}${toUrl}`,
       data,
+      withCredentials: true,
     });
     if (res.data) {
       return res.data;
@@ -24,6 +25,7 @@ const sendReqPut = async (data: object | [object], toUrl: string) => {
       method: "put",
       url: `${URL_SERVER}${toUrl}`,
       data,
+      withCredentials: true,
     });
     if (res.data) {
       return res.data.acknowledged;

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import UsersSchema, { genToken } from "../../schemas/UsersSchema";
 import jwt from "jsonwebtoken";
-// require('dotenv').config('../../.env')
 
 //הפונקציה מאמתת את הסיסמא של היוזר ויוצרת תוקן ע"י פונקציה
 export const signInPage = async (req: Request, res: Response) => {
@@ -50,7 +49,8 @@ export const signUpPage = async (req: Request, res: Response) => {
     else {
       user = await new UsersSchema(req.body);
       await user.save();
-      const token = genToken(user);
+      let token = genToken(user);
+      res.cookie("token", `${token}`);
 
       await UsersSchema.findOneAndUpdate(
         { _id: user._id },
@@ -58,8 +58,9 @@ export const signUpPage = async (req: Request, res: Response) => {
       );
 
       user.pass = '****'
-
-      res.send({ user, token });
+      console.log(req.cookies['token']);
+      
+     return res.send({ user, token });
     }
   } catch (error) {
     console.error(error);
