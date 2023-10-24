@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 //הפונקציה מאמתת את הסיסמא של היוזר ויוצרת תוקן ע"י פונקציה
 export const signInPage = async (req: Request, res: Response) => {
   try {
+
+
     const user = await UsersSchema.findOne({
       $and: [{ email: req.body.email }, { pass: req.body.pass }]
     });
@@ -20,12 +22,13 @@ export const signInPage = async (req: Request, res: Response) => {
       return res.send("שם משתמש או סיסמה שגויים");
     }
 
-    const token = genToken(user);
+    const token = genToken(user._id);
 
     await UsersSchema.findOneAndUpdate(
       { _id: user._id },
       { $set: { token: token } }
     );
+
     res.send({ user, token });
 
   } catch (error) {
@@ -42,14 +45,13 @@ export const signUpPage = async (req: Request, res: Response) => {
     });
 
     if (user) {
-      console.log("משתמש קיים במערכת");
 
       return res.send("משתמש קיים במערכת");
     }
     else {
       user = await new UsersSchema(req.body);
       await user.save();
-      let token = genToken(user);
+      let token = genToken(user._id);
       res.cookie("token", `${token}`);
 
       await UsersSchema.findOneAndUpdate(
@@ -58,9 +60,9 @@ export const signUpPage = async (req: Request, res: Response) => {
       );
 
       user.pass = '****'
-      console.log(req.cookies['token']);
-      
-     return res.send({ user, token });
+      // console.log(req.cookies['token']);
+
+      return res.send({ user, token });
     }
   } catch (error) {
     console.error(error);
@@ -75,8 +77,12 @@ export const authenticationToken = async (
   next: NextFunction
 ) => {
   try {
-    let token: any = req.header("x-api-key");
+
+    let token: any = req.header("x-api-key")
+    console.log(token);
+
     let user = jwt.verify(token, `${process.env.TOKEN}`);
+
     user && res.send(true)
     // req.body.user = user;
   } catch (error) {
@@ -92,7 +98,6 @@ export const fo = async (req: Request, res: Response) => {
       { _id: req.body.userId },
       { dade_created: 0, pass: 0 }
     );
-    console.log(user);
 
     return res.json(user);
   } catch (err) {

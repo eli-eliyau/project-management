@@ -17,8 +17,8 @@ export interface IUser {
 
 // 2. Create a Schema corresponding to the document interface.
 const userSchema: Schema = new Schema<IUser>({
-  name: { type: String, required: true },
-  email: { type: String },
+  name: { type: String },
+  email: { type: String,required: true },
   pass: { type: String, required: true },
   dade_created: {
     type: Date,
@@ -31,7 +31,7 @@ const userSchema: Schema = new Schema<IUser>({
 const UsersSchema = mongoose.model<IUser>("users", userSchema);
 
 export const genToken = (userId: Object) => {
-  let token = jwt.sign({ _id: userId }, `${process.env.TOKEN}`, { expiresIn: "1mins" });
+  let token = jwt.sign({ _id: userId }, `${process.env.TOKEN}`, { expiresIn: "10mins" });
   return token;
 };
 export default  UsersSchema;

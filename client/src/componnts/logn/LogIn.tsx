@@ -14,11 +14,12 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useNavigate } from "react-router-dom";
-import { API_CLIET } from "../../App";
+import { API_CLIET, URL_SERVER } from "../../App";
 import { sendReqGet, sendReqPost } from "../../axios";
 import { CacheProvider } from "@emotion/react";
 import { cacheRtl } from "./SignIn";
 import { FormControl } from "@mui/material";
+import axios from "axios";
 
 interface IProps {
   toUrlServer: string;
@@ -41,10 +42,18 @@ const LogIn = ({ toUrlServer }: IProps) => {
     };
 
     if (toUrlServer === "signIn" || toUrlServer === "signUp") {
+      // axios.get(`${URL_SERVER}/authToken`, {
+
+      // })
+      // .then(response => {
+      //   console.log(response);
+
+      // })
+      console.log(toUrlServer);
+
       sendReqPost(dataUserToForm, `/${toUrlServer}`)
         .then((res) => {
           const data = res;
-          console.log(res);
 
           res === "משתמש קיים במערכת"
             ? setMessage("משתמש קיים במערכת")
@@ -52,18 +61,18 @@ const LogIn = ({ toUrlServer }: IProps) => {
             ? setMessage("משתמש לא קיים")
             : sendReqGet(
                 {
-                  "x-api-key": res.token,
+                  "x-api-key": data.token,
                 },
                 "/authToken"
               ).then((res) => {
-                console.log(document.cookie);
+                console.log(res);
                 if (res === true) {
                   localStorage.setItem("user", "1");
                   localStorage.setItem("idMyUser", data.user._id);
                   localStorage.setItem("userName", data.user.name);
                   localStorage.setItem("role", data.user.role);
                   localStorage.setItem("token", data.token);
-                  // navigate(0);
+                  navigate(0);
                 } else {
                   setMessage("תוקן לא חוקי");
                 }

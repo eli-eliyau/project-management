@@ -13,7 +13,9 @@ router.post("/signUp", signUpPage);
 router.post("/signIn", signInPage);
 
 //הראוט מקבל את התוקן מהפרונט ןאז הפונקציה הראושנה מאמתת את התוקן ומחזירה שהיוזר נמצא בדאתא
-router.get("/authenticationToken", authenticationToken, fo);
+// router.get("/authenticationToken", authenticationToken, fo);
 router.get("/authToken", authenticationToken);
+// router.get("/authToken", ()=>{console.log("elieleielie");
+// });
 
 export default router;
