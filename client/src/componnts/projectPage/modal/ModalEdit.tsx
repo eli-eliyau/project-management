@@ -3,7 +3,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ThemeProvider } from "@mui/system";
 import { CacheProvider } from "@emotion/react";
-import { cacheRtl, theme } from "../../logn/SignIn";
 import { useForm } from "react-hook-form";
 import { sendReqPut } from "../../../axios";
 import ChipsArray from "./Chip";
@@ -14,6 +13,7 @@ import InputDate from "../../task/InputDate";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { useState } from "react";
 import SelectInput from "../../createNewProjectPage/SelectInput";
+import { cacheRtl, theme } from "../../logn/LogIn";
 
 const ModalEdit = ({
   onClose: onCloseModal,

@@ -6,7 +6,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { useLocation } from "react-router-dom";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
-import { useState } from "react";
 
 export const buttons = [
   {
@@ -44,14 +43,21 @@ const addButtonAddTask = [
 
 const SideBar = () => {
   const location = useLocation();
-  let newButtons: any;
+  const role = localStorage.getItem("role");
+  let newButtons = buttons;
 
-  if (location.pathname === "/project") {
-    newButtons = buttons.concat(addButtonTask);
+  if (role === "user") {
+    newButtons = buttons.filter((button) => {
+      return button.name !== "יצירת פרויקט";
+    });
   }
 
-  if (location.pathname === "/task") {
-    newButtons = buttons.concat(addButtonAddTask);
+  if (location.pathname === "/project") {
+    newButtons = newButtons.concat(addButtonTask);
+  }
+
+  if (role === "admin" && location.pathname === "/task") {
+    newButtons = newButtons.concat(addButtonAddTask);
   }
 
   return (
@@ -69,11 +75,12 @@ const SideBar = () => {
       >
         <ListButtonsBar
           listButtons={
-            location.pathname === `/project`
-              ? newButtons
-              : location.pathname === "/task"
-              ? newButtons
-              : buttons
+            // location.pathname === `/project`
+            //   ? newButtons
+            //   : location.pathname === "/task"
+            //   ? newButtons
+            //   :
+            newButtons
           }
         />
       </Grid>

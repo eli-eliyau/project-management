@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -12,20 +10,27 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import createCache from "@emotion/cache";
 import { useNavigate } from "react-router-dom";
-import { API_CLIET, URL_SERVER } from "../../App";
+import { API_CLIET } from "../../App";
 import { sendReqGet, sendReqPost } from "../../axios";
 import { CacheProvider } from "@emotion/react";
-import { cacheRtl } from "./SignIn";
-import { FormControl } from "@mui/material";
-import axios from "axios";
+import rtlPlugin from "stylis-plugin-rtl";
+import { prefixer } from "stylis";
 
 interface IProps {
   toUrlServer: string;
 }
 
-const theme = createTheme();
+export const cacheRtl = createCache({
+  key: "muirtl",
+  stylisPlugins: [prefixer, rtlPlugin],
+});
+export const theme = createTheme({
+    direction: "ltr",
+  });
+
+
 
 const LogIn = ({ toUrlServer }: IProps) => {
   const [messeage, setMessage] = React.useState("");
@@ -42,15 +47,6 @@ const LogIn = ({ toUrlServer }: IProps) => {
     };
 
     if (toUrlServer === "signIn" || toUrlServer === "signUp") {
-      // axios.get(`${URL_SERVER}/authToken`, {
-
-      // })
-      // .then(response => {
-      //   console.log(response);
-
-      // })
-      console.log(toUrlServer);
-
       sendReqPost(dataUserToForm, `/${toUrlServer}`)
         .then((res) => {
           const data = res;

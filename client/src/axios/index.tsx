@@ -39,7 +39,6 @@ const sendReqPut = async (data: object | [object], toUrl: string) => {
 
 const sendReqGet = async (data: object, toUrl: string) => {
   try {
-    
     const res = await axios({
       method: "get",
       url: `${URL_SERVER}${toUrl}`,

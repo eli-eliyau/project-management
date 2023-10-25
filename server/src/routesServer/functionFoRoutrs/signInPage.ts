@@ -79,7 +79,6 @@ export const authenticationToken = async (
   try {
 
     let token: any = req.header("x-api-key")
-    console.log(token);
 
     let user = jwt.verify(token, `${process.env.TOKEN}`);
 

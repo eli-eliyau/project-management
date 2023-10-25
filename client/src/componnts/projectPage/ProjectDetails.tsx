@@ -21,6 +21,7 @@ const ProjectDetails = () => {
   const [index, setIndex] = React.useState<number>(0);
   const [items, setItems] = React.useState<UpdateProjectData>([{ s: "s" }]);
   const id = useRecoilValue(projectId);
+  const role = localStorage.getItem("role");
 
   React.useEffect(() => {
     //בקשה לקבל את הנתונים של המפרויקט
@@ -106,21 +107,22 @@ const ProjectDetails = () => {
                   </Grid>
 
                   <Grid item>
-                    <Button
-                      onClick={() => {
-                        if (key === "projectTeam") {
-                          projectData.projectTeam.map((item) => 
-                            item[`nameRow`] = "projectTeam"
-                          );
-                          setItems(projectData.projectTeam);
-                        } 
-                        else setItems([{ [key]: value }]);
-                        setIndex(index);
-                        setOpenModal(true);
-                      }}
-                    >
-                      <EditIcon htmlColor="#0661A2" />
-                    </Button>
+                    {role !== "user" && (
+                      <Button
+                        onClick={() => {
+                          if (key === "projectTeam") {
+                            projectData.projectTeam.map(
+                              (item) => (item[`nameRow`] = "projectTeam")
+                            );
+                            setItems(projectData.projectTeam);
+                          } else setItems([{ [key]: value }]);
+                          setIndex(index);
+                          setOpenModal(true);
+                        }}
+                      >
+                        <EditIcon htmlColor="#0661A2" />
+                      </Button>
+                    )}
                   </Grid>
 
                   {/* <Api task={task} /> */}
@@ -139,7 +141,7 @@ const ProjectDetails = () => {
           }}
         />
       )}
-      {openModal && (
+      {openModal && role !== "user" && (
         <Modal open={openModal} sx={{ background: "#5be6f841" }}>
           <>
             <ModalEdit

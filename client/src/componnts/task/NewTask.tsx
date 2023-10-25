@@ -7,17 +7,13 @@ import {
   Typography,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { CacheProvider } from "@emotion/react";
-import { cacheRtl, theme } from "../logn/SignIn";
-import { useState } from "react";
-import heLocale from "date-fns/locale/he";
 import { sendReqPost } from "../../axios";
 import { useRecoilValue } from "recoil";
 import { projectId } from "../../recoilAtom/Atoms";
 import { useNavigate } from "react-router-dom";
 import InputDate from "./InputDate";
+import { cacheRtl, theme } from "../logn/LogIn";
 
 interface FormData {
   projectId: string;

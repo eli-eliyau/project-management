@@ -20,10 +20,21 @@ interface ITask {
 //מחזיר את כל הפרויקטים לדף הבית אבל רק שם סטטוס ומצב
 export const projectsHomePage = async (req: Request, res: Response) => {
   try {
+    let projects: IProject[] = []
 
-    console.log();
+    const user = await UsersSchema.findById(req.body.id);
+
+    if (user?.role === 'admin') {
+      projects = await ProjectSchema.find({}, {
+        users: 0,
+        topUser: 0,
+        projectDescription: 0,
+        projectClient: 0,
+        __v: 0,
+      });
+    }
     
-    let projects = await ProjectSchema.find({
+    else projects = await ProjectSchema.find({
       projectTeam: {
         $elemMatch: { _id: req.body.id }
       }
@@ -33,10 +44,9 @@ export const projectsHomePage = async (req: Request, res: Response) => {
       projectDescription: 0,
       projectClient: 0,
       __v: 0,
-    })
+    });
 
-
-    projects.sort((a, b) => {
+    projects?.sort((a, b) => {
 
       const dateA = dayjs(a.dateCreated.type);
       const dateB = dayjs(b.dateCreated.type);
