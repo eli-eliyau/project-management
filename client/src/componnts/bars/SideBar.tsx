@@ -1,10 +1,11 @@
-import { Grid } from "@mui/material";
+import { CardMedia, Grid } from "@mui/material";
 import ListButtonsBar from "./ListButtonsBar";
 import CreateIcon from "@mui/icons-material/Create";
 import FolderIcon from "@mui/icons-material/Folder";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { useLocation } from "react-router-dom";
+import logo from "../../api/logo.png";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 export const buttons = [
@@ -67,22 +68,20 @@ const SideBar = () => {
       sx={{ background: "#83C1ED", height: "100vh", mt: 5 }}
     >
       <Grid
-        item
+        container
         direction="column"
-        justifyContent="start"
+        justifyContent="space-between"
+        alignItems="center"
         width={"100%"}
-        sx={{ mt: 1 }}
+        sx={{ mt: 2 }}
       >
-        <ListButtonsBar
-          listButtons={
-            // location.pathname === `/project`
-            //   ? newButtons
-            //   : location.pathname === "/task"
-            //   ? newButtons
-            //   :
-            newButtons
-          }
-        />
+        <Grid item >
+
+        <ListButtonsBar listButtons={newButtons} />
+        </Grid>
+        <Grid item >
+          <CardMedia component="img" image={`${logo}`} height={"100%"} width={'100%'}/>
+        </Grid>
       </Grid>
     </Grid>
   );

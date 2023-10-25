@@ -17,6 +17,8 @@ import { sendReqGet, sendReqPost } from "../../axios";
 import { CacheProvider } from "@emotion/react";
 import rtlPlugin from "stylis-plugin-rtl";
 import { prefixer } from "stylis";
+import logo from "../../api/logo.png";
+import { CardMedia } from "@mui/material";
 
 interface IProps {
   toUrlServer: string;
@@ -82,23 +84,27 @@ const LogIn = ({ toUrlServer }: IProps) => {
 
   return (
     <>
+          <Container component="main" maxWidth="xs" sx={{height:'100vh'}}>
+
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
+            {/* <CssBaseline /> */}
             <Box
               sx={{
-                marginTop: 8,
+                // marginTop: 8,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                {toUrlServer === "signIn" ? "Sign in" : "Sign up"}
+              <Box  sx={{height:'200px' }} >
+              <CardMedia component="img" image={`${logo}`} height={"200px"} />
+              </Box>
+              {/* <Avatar sx={{  bgcolor: "ButtonHighlight" }}>  */}
+                {/* <LockOutlinedIcon /> */}
+              {/* </Avatar> */}
+              <Typography component="h1" variant="h5" sx={{color:'#ffffff'}}>
+                {toUrlServer === "signIn" ? "כניסה" : "הרשמה"}
               </Typography>
 
               <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -162,9 +168,10 @@ const LogIn = ({ toUrlServer }: IProps) => {
                 </Grid>
               </Box>
             </Box>
-          </Container>
         </ThemeProvider>
       </CacheProvider>
+      </Container>
+
     </>
   );
 };

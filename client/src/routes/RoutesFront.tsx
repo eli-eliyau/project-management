@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Fragment, useState } from "react";
 import ProjectsPage from "../componnts/projectsPage/Projects";
-import { Grid, useMediaQuery, AppBar } from "@mui/material";
+import { Grid, useMediaQuery, AppBar, Box } from "@mui/material";
 import SideBar from "../componnts/bars/SideBar";
 import HeaderBar from "../componnts/bars/HeaderBar";
 import LogOut from "../componnts/logn/LogOut";
@@ -25,12 +25,17 @@ const RoutesFront = () => {
   return (
     <Fragment>
       {userValid === null ? (
-        <Routes>
-          <Route path="/sign-in" element={<LogIn toUrlServer={"signIn"} />} />
-          <Route path="/sign-up" element={<LogIn toUrlServer={"signUp"} />} />
-
-          <Route path="*" element={<Navigate replace to="/sign-in" />} />
-        </Routes>
+        <Box
+          sx={{
+            background: "#83c1edb1",
+          }}
+        >
+          <Routes>
+            <Route path="/sign-in" element={<LogIn toUrlServer={"signIn"} />} />
+            <Route path="/sign-up" element={<LogIn toUrlServer={"signUp"} />} />
+            <Route path="*" element={<Navigate replace to="/sign-in" />} />
+          </Routes>
+        </Box>
       ) : userValid === `1` ? (
         <>
           <Grid
@@ -54,7 +59,7 @@ const RoutesFront = () => {
                   zIndex: +1,
                 }}
               >
-                <SideBar  />
+                <SideBar />
               </AppBar>
             )}
 

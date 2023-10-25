@@ -4,15 +4,12 @@ import {
   Grid,
   Typography,
   Button,
-  Box,
-  CardMedia,
 } from "@mui/material";
 import ListButtons from "./ListButtonsBar";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChatIcon from "@mui/icons-material/Chat";
 import { buttons } from "./SideBar";
-import logo from "../../api/logo.png";
 
 export const userName = () => (
   <Typography
@@ -69,9 +66,7 @@ const HeaderBar = (props: { isSmallScreen: boolean }) => {
           alignItems="flex-start"
         >
           <Grid item>{userName()}</Grid>
-          <Grid item sx={{ position: 'fixed', top: 0, left: 8 ,width:'180px' }}>
-            <CardMedia component="img" image={`${logo}`}  height={'160px'} />
-          </Grid>
+         
         </Grid>
       )}
     </Grid>
