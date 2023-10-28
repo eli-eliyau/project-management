@@ -65,7 +65,7 @@ const SideBar = () => {
     <Grid
       container
       direction="row"
-      sx={{ background: "#83C1ED", height: "100vh", mt: 5 }}
+      sx={{ background: "linear-gradient(0deg, rgba(131,193,237,1) 31%, rgba(6,97,162,1) 100%)", height: "100vh", mt: 5 }}
     >
       <Grid
         container

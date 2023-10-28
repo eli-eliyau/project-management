@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, hexToRgb, ThemeProvider } from "@mui/material/styles";
 import createCache from "@emotion/cache";
 import { useNavigate } from "react-router-dom";
 import { API_CLIET } from "../../App";
@@ -29,10 +29,8 @@ export const cacheRtl = createCache({
   stylisPlugins: [prefixer, rtlPlugin],
 });
 export const theme = createTheme({
-    direction: "ltr",
-  });
-
-
+  direction: "ltr",
+});
 
 const LogIn = ({ toUrlServer }: IProps) => {
   const [messeage, setMessage] = React.useState("");
@@ -81,13 +79,11 @@ const LogIn = ({ toUrlServer }: IProps) => {
         });
     }
   };
-
   return (
     <>
-          <Container component="main" maxWidth="xs" sx={{height:'100vh'}}>
-
-      <CacheProvider value={cacheRtl}>
-        <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs" sx={{ height: "100vh" }}>
+        <CacheProvider value={cacheRtl}>
+          <ThemeProvider theme={theme}>
             {/* <CssBaseline /> */}
             <Box
               sx={{
@@ -97,15 +93,24 @@ const LogIn = ({ toUrlServer }: IProps) => {
                 alignItems: "center",
               }}
             >
-              <Box  sx={{height:'200px' }} >
-              <CardMedia component="img" image={`${logo}`} height={"200px"} />
+              <Box
+                sx={{
+                  height: "200px",
+                  borderRadius: "50% 50% 50% 50% / 30% 30% 70% 70% ",
+                  background: 'linear-gradient(39deg, rgba(6,97,162,1) 90%, rgba(131,193,237,1) 90%)' ,
+                  mt: 2,
+                }}
+              >
+                <CardMedia component="img" image={`${logo}`} height={"200px"} />
               </Box>
-              {/* <Avatar sx={{  bgcolor: "ButtonHighlight" }}>  */}
+
+              <Avatar sx={{ bgcolor: "#0661a2", mt: 4 }}>
                 {/* <LockOutlinedIcon /> */}
-              {/* </Avatar> */}
-              <Typography component="h1" variant="h5" sx={{color:'#ffffff'}}>
+              </Avatar>
+
+              {/* <Typography component="h1" variant="h5" sx={{color:'#035590a2'}}>
                 {toUrlServer === "signIn" ? "כניסה" : "הרשמה"}
-              </Typography>
+              </Typography> */}
 
               <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                 {toUrlServer === "signUp" && (
@@ -124,6 +129,7 @@ const LogIn = ({ toUrlServer }: IProps) => {
                   margin="normal"
                   required
                   fullWidth
+                  variant="filled"
                   id="email"
                   label="מייל"
                   name="email"
@@ -134,6 +140,7 @@ const LogIn = ({ toUrlServer }: IProps) => {
                   margin="normal"
                   required
                   fullWidth
+                  variant="filled"
                   name="password"
                   label="סיסמה"
                   type="password"
@@ -144,10 +151,10 @@ const LogIn = ({ toUrlServer }: IProps) => {
                 <Button
                   type="submit"
                   fullWidth
-                  variant="contained"
+                  variant="outlined"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  שליחה
+                  {toUrlServer === "signIn" ? "כניסה" : "הרשמה"}
                 </Button>
                 <Grid
                   container
@@ -158,7 +165,7 @@ const LogIn = ({ toUrlServer }: IProps) => {
                   <Grid item>
                     {toUrlServer === "signIn" && (
                       <Link href={`${API_CLIET}/sign-up`} variant="body2">
-                        הרשמה
+                        אינך רשום? הירשם עכשיו
                       </Link>
                     )}
                   </Grid>
@@ -168,10 +175,9 @@ const LogIn = ({ toUrlServer }: IProps) => {
                 </Grid>
               </Box>
             </Box>
-        </ThemeProvider>
-      </CacheProvider>
+          </ThemeProvider>
+        </CacheProvider>
       </Container>
-
     </>
   );
 };

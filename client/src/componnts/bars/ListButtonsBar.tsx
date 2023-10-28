@@ -35,7 +35,7 @@ const ListButtonsBar = ({ listButtons }: ListButtonsProps) => {
       direction="column"
       justifyContent="flex-start"
       alignItems="center"
-      sx={{ background: "#83C1ED", height: "100%" }}
+      sx={{ height: "100%" }}
     >
       <List>
         {listButtons.map((item, index) => {
@@ -46,7 +46,7 @@ const ListButtonsBar = ({ listButtons }: ListButtonsProps) => {
               <ListItemButton
                 key={index}
                 sx={{
-                  bgcolor: index === pressed ? "#ffff" : "#83C1ED",
+                  bgcolor: index === pressed ? "#ffff" : "#83c1ed0",
                   borderRadius: " 20px 0px 0px 30px",
                 }}
                 onClick={() => {

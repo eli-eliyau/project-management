@@ -38,8 +38,9 @@ const HeaderBar = (props: { isSmallScreen: boolean }) => {
       direction="row"
       justifyContent="flex-start"
       alignItems="flex-start"
-      sx={{ background: "#0661A2" }}
+      sx={{ background: 'linear-gradient(90deg, rgba(131,193,237,1) 9%, #0661a2 94%)' }}
     >
+    
       {props.isSmallScreen ? (
         <>
           <Drawer

@@ -26,9 +26,9 @@ const RoutesFront = () => {
     <Fragment>
       {userValid === null ? (
         <Box
-          sx={{
-            background: "#83c1edb1",
-          }}
+          // sx={{
+          //   background: "#83c1edb1",
+          // }}
         >
           <Routes>
             <Route path="/sign-in" element={<LogIn toUrlServer={"signIn"} />} />
